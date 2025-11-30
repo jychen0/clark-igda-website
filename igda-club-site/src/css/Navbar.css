@@ -1,0 +1,46 @@
+.navbar-custom {
+    background-color: #1E1E1E;
+}
+
+.navbar-custom .navbar-brand {
+    font-weight: 600;
+    color: #fff !important;
+}
+
+.navbar-custom .navbar-brand:hover {
+    color: #EE2E24 !important;
+}
+
+/* Nav links */
+.navbar-custom .nav-link {
+    color: #f8f9fa !important;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #EE2E24 !important;
+}
+
+/* Dropdown menu */
+.navbar-custom .dropdown-menu {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-custom .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.navbar-custom .navbar-brand img {
+    border-radius: 50%;
+}
+
+/* Mobile Toggler (hamburger) */
+.navbar-custom .navbar-toggler {
+    border: none;
+}
+.navbar-custom .navbar-toggler:focus {
+    box-shadow: none;
+}
