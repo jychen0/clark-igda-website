@@ -11,8 +11,8 @@ mongoose.connect('mongodb://localhost:27017/movieDB', {})
         console.log("db connected");
     });
 
-app.listen(3000, function () {
-    console.log("server started at 3000");
+app.listen(3001, function () {
+    console.log("backend server started at 3001");
 });
 
 app.get('/', function (req, res) {

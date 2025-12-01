@@ -2,10 +2,8 @@ const fs=require('fs');
 const mongoose = require('mongoose');
 const csv_parse = require('csv-parse/sync');
 
-
-// dir for images: /igda-club-site/src/assets/event_posters/
-const rawData=fs.readFileSync(__dirname+'/past_events.csv','utf8');
-const parsedData = csv_parse.parse(rawData, {
+const rawEventData=fs.readFileSync(__dirname+'/' + 'events.csv','utf8');
+const parsedEventData = csv_parse.parse(rawEventData, {
     columns: true,
     skip_empty_lines: true,
 });
@@ -15,47 +13,41 @@ mongoose.connect('mongodb://localhost:27017/eventDB', {})
         console.log("db connected");
     });
 
-//eventName,eventType,posterIMG
-//speakerNames,speakerInfos,speakerCreds
-//targetTracks
-//semester,startTime,endTime
-//inPerson,location
-//involvedClubs,capacity,overview,attendance
-
-//subdocument schema to handle multiple speakers
+//subdocument schema for event speakers {name, info, credentials}
 const speakerSchema ={
-    speakerName:{
+    speakerName:{ //Speaker full name
         type:String,
         required:[true, 'Speaker Name is required'],
         minLength:[4, 'Speaker Name must be at least 4 characters'],
     },
-    speakerInfo:{
+    speakerInfo:{ //Speaker LinkedIn URL
         type:String,
     },
-    speakerCred:{
+    speakerPos:{ //Speaker Position
+        type:String,
+    },
+    speakerCred:{ //Speaker Company / Affiliation
         type:String,
     }
 }
-
-//subdocument schema to handle date info
+//subdocument schema for event date {semester, startTime, endTime}
 const dateSchema ={
-    semester:{
+    semester:{ //Semester event ran in
         type:String,
         required:[true, 'Semester is required'],
     },
-    start:{
+    start:{ //Start time of event
         type:Date,
         required:[true, 'Start Time is required'],
         min:['2023-01-01T00:00:00', 'Event must be since 2023'],
     },
-    end:{
+    end:{ //End time of event
         type:Date,
         required:[true, 'End Time is required'],
         min:['2023-01-01T00:00:00', 'Event must be since 2023'],
     }
 }
-
-//subdocument schema to handle location info, 0=virtual, 1=in person
+//subdocument schema for event location, {held, location} 0=virtual, 1=in person
 const locationSchema ={
     held:{
         type:Number,
@@ -66,60 +58,55 @@ const locationSchema ={
         required:[true, 'Location is required'],
     },
 }
-
 function minLength(val) {
+    //enforce minimum of 1 array object, used for speaker, involved clubs, and target tracks
     return val.length > 0;
 }
-
 function minTimeframe(date) {
+    //enforce event endTime being after startTime, currently broken
     return date.start < date.end;
 }
-
 const eventSchema={
-    eventName:{
+    eventName:{ //Event Title
         type:String,
         required:[true, 'Event Title is required'],
-        minLength:[10, 'Event Title must be at least 10 characters'],
+        minLength:[5, 'Event Title must be at least 5 characters'],
     },
-    //possible events: talk, workshop, info session, mixer
-    eventType:{
+    eventType:{ //talk, workshop, info session, mixer, game jam, asset jam, expo, field trip
         type:String,
         required:[true, 'Event type is required'],
     },
-    posterIMG:{
+    posterIMG:{ //dir for images: /igda-club-site/src/assets/event_posters/ + posterIMG string
         type:String,
     },
-    //defines this as an array of speakers with minLength of 1
-    speakers: {
+    speakers: { //array of outside industry speakers
         type: [{
             type: speakerSchema,
         }],
-        validate: [minLength, 'Must have at least one speaker']
+        //validate: [minLength, 'Must have at least one speaker']
     },
-    //lists all tracks the event caters towards
-    targetTracks: {
+    targetTracks: { //lists all tracks the event caters towards (Production, Programming, 3D Art, 2D Art, Audio, Writing, Design)
         type: [{
             type:String,
         }],
     },
-    date: {
+    date: { //date object
         type: dateSchema,
         //validate: [minTimeframe, 'End time must be after start time']
     },
-    location: {
+    location: { //location object
         type: locationSchema
     },
-    //IGDA is always listed, additional clubs are optional
-    involvedClubs: {
+    involvedClubs: { //IGDA is assumed, only lists additional clubs
         type: [{
             type:String,
         }],
-        validate: [minLength, 'Must have at least one involved Club']
+        //validate: [minLength, 'Must have at least one involved Club']
     },
     overview:{
         type:String,
     },
-    capacity:{
+    capacity:{ //if applicable, must be an int
         type:Number,
         validate: {
             validator: function (value) {
@@ -128,7 +115,7 @@ const eventSchema={
             message: "Capacity must be an integer"
         },
     },
-    attendance:{
+    attendance:{ //recorded # of attendees
         type:Number,
         validate: {
             validator: function (value) {
@@ -142,8 +129,7 @@ const eventSchema={
 const Event=mongoose.model('Events',eventSchema);
 const eventList=[];
 
-parsedData.forEach(event=>{
-
+parsedEventData.forEach(event=>{
     eventList.push({
         //mongoose schema: csv entry
         eventName: event.eventName,
@@ -163,33 +149,40 @@ parsedData.forEach(event=>{
         },
         //array of strings
         targetTracks: processArrays(event.targetTracks),
-        involvedClubs: processArrays(event.involvedClubs),
+        ...((!!event.involvedClubs) && { involvedClubs: processArrays(event.involvedClubs) }),
         //array of subdocuments
-        speakers: processSpeakers(event.speakerNames, event.speakerInfos, event.speakerCreds,),
+        ...((!!event.speakerNames) && { speakers: processSpeakers(event.speakerNames, event.speakerInfos, event.speakerCreds, event.speakerPos) }),
         //requires validation if provided
         ...((!!event.capacity) && { capacity: event.capacity }),
     });
 });
 
 function processArrays(eventInfo) {
+    //convert applicable event info into array of strings
     return eventInfo.split(/[|]/); //use regex to split string at |
 }
-function processSpeakers(Names, Infos, Creds) {
+function processSpeakers(Names, Infos, Creds, Pos) {
+    //convert speaker parameters into array of speaker objects
     let speakerNames =  Names.split(/[|]/); //names is the only required portion
     let speakerInfos =  Infos.split(/[|]/);
     let speakerCreds =  Creds.split(/[|]/);
+    let speakerPos = Pos.split(/[|]/);
     const speakerList=[];
-
     //must have same # of separator chars in each field, but value may be empty
     speakerNames.forEach((speaker, index) => {
         speakerList.push({
             speakerName: speakerNames[index],
             speakerInfo: speakerInfos[index],
             speakerCred: speakerCreds[index],
+            speakerPos: speakerPos[index],
         })
     })
     return speakerList;
 }
+
+
+
+
 
 Event.insertMany(eventList).then(events=>{
     mongoose.connection.close();
