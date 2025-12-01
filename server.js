@@ -11,6 +11,7 @@ mongoose.connect('mongodb://localhost:27017/movieDB', {})
         console.log("db connected");
     });
 
+//frontend on port 3000
 app.listen(3001, function () {
     console.log("backend server started at 3001");
 });
@@ -19,47 +20,42 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + "/public/index.html");
 });
 
-//eventName,eventType,posterIMG
-//speakerNames,speakerInfos,speakerCreds
-//targetTracks
-//semester,startTime,endTime
-//inPerson,location
-//involvedClubs,capacity,overview,attendance
 
-//subdocument schema to handle multiple speakers
+//subdocument schema for event speakers {name, info, credentials}
 const speakerSchema ={
-    speakerName:{
+    speakerName:{ //Speaker full name
         type:String,
         required:[true, 'Speaker Name is required'],
         minLength:[4, 'Speaker Name must be at least 4 characters'],
     },
-    speakerInfo:{
+    speakerInfo:{ //Speaker LinkedIn URL
         type:String,
     },
-    speakerCred:{
+    speakerPos:{ //Speaker Position
+        type:String,
+    },
+    speakerCred:{ //Speaker Company / Affiliation
         type:String,
     }
 }
-
-//subdocument schema to handle date info
+//subdocument schema for event date {semester, startTime, endTime}
 const dateSchema ={
-    semester:{
+    semester:{ //Semester event ran in
         type:String,
         required:[true, 'Semester is required'],
     },
-    start:{
+    start:{ //Start time of event
         type:Date,
         required:[true, 'Start Time is required'],
         min:['2023-01-01T00:00:00', 'Event must be since 2023'],
     },
-    end:{
+    end:{ //End time of event
         type:Date,
         required:[true, 'End Time is required'],
         min:['2023-01-01T00:00:00', 'Event must be since 2023'],
     }
 }
-
-//subdocument schema to handle location info, 0=virtual, 1=in person
+//subdocument schema for event location, {held, location} 0=virtual, 1=in person
 const locationSchema ={
     held:{
         type:Number,
@@ -70,60 +66,55 @@ const locationSchema ={
         required:[true, 'Location is required'],
     },
 }
-
 function minLength(val) {
+    //enforce minimum of 1 array object, used for speaker, involved clubs, and target tracks
     return val.length > 0;
 }
-
 function minTimeframe(date) {
+    //enforce event endTime being after startTime, currently broken
     return date.start < date.end;
 }
-
 const eventSchema={
-    eventName:{
+    eventName:{ //Event Title
         type:String,
         required:[true, 'Event Title is required'],
-        minLength:[10, 'Event Title must be at least 10 characters'],
+        minLength:[5, 'Event Title must be at least 5 characters'],
     },
-    //possible events: talk, workshop, info session, mixer
-    eventType:{
+    eventType:{ //talk, workshop, info session, mixer, game jam, asset jam, expo, field trip
         type:String,
         required:[true, 'Event type is required'],
     },
-    posterIMG:{
+    posterIMG:{ //dir for images: /igda-club-site/src/assets/event_posters/ + posterIMG string
         type:String,
     },
-    //defines this as an array of speakers with minLength of 1
-    speakers: {
+    speakers: { //array of outside industry speakers
         type: [{
             type: speakerSchema,
         }],
-        validate: [minLength, 'Must have at least one speaker']
+        //validate: [minLength, 'Must have at least one speaker']
     },
-    //lists all tracks the event caters towards
-    targetTracks: {
+    targetTracks: { //lists all tracks the event caters towards (Production, Programming, 3D Art, 2D Art, Audio, Writing, Design)
         type: [{
             type:String,
         }],
     },
-    date: {
+    date: { //date object
         type: dateSchema,
         //validate: [minTimeframe, 'End time must be after start time']
     },
-    location: {
+    location: { //location object
         type: locationSchema
     },
-    //IGDA is always listed, additional clubs are optional
-    involvedClubs: {
+    involvedClubs: { //IGDA is assumed, only lists additional clubs
         type: [{
             type:String,
         }],
-        validate: [minLength, 'Must have at least one involved Club']
+        //validate: [minLength, 'Must have at least one involved Club']
     },
     overview:{
         type:String,
     },
-    capacity:{
+    capacity:{ //if applicable, must be an int
         type:Number,
         validate: {
             validator: function (value) {
@@ -132,7 +123,7 @@ const eventSchema={
             message: "Capacity must be an integer"
         },
     },
-    attendance:{
+    attendance:{ //recorded # of attendees
         type:Number,
         validate: {
             validator: function (value) {
