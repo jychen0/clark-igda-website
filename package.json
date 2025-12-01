@@ -1,4 +1,30 @@
 {
+  "name": "clark-igda-website-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "homepage": "https://github.com/jychen0/clark-igda-website#readme",
+  "bugs": {
+    "url": "https://github.com/jychen0/clark-igda-website/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jychen0/clark-igda-website.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "db_initializer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.1",
+    "csv-parse": "^6.1.0",
+    "express": "^5.1.0",
+    "mongoose": "^9.0.0"
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.6",
