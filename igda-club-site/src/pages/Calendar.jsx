@@ -7,6 +7,9 @@ function CalendarPage() {
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());
     const [currentYear, setCurrentYear] = useState(today.getFullYear());
 
+    const [firstYear, setFirstYear] = useState(false);
+    const [firstMonth, setFirstMonth] = useState(false);
+
     // Track active filters
     const [activeFilters, setActiveFilters] = useState([
         "Game Jam",
@@ -43,8 +46,12 @@ function CalendarPage() {
         if (currentMonth === 11) {
             setCurrentMonth(0);
             setCurrentYear(currentYear + 1);
+            if ((currentYear + 1) > 2023) {
+                setFirstYear(false);//re-enable previous year button
+            }
         } else {
             setCurrentMonth(currentMonth + 1);
+            setFirstMonth(false); //re-enable previous month button
         }
     };
 
@@ -52,10 +59,39 @@ function CalendarPage() {
         if (currentMonth === 0) {
             setCurrentMonth(11);
             setCurrentYear(currentYear - 1);
+            if ((currentYear - 1) <= 2023) {
+                setFirstYear(true);//jan 2024
+            }
         } else {
             setCurrentMonth(currentMonth - 1);
+            if ((currentMonth - 1) === 0) {
+                if ((currentYear) <= 2023) {
+                    setFirstMonth(true); //jan 2023
+                }
+            }
         }
     };
+    //currentYear seems to lag 1 value behind what it should be, maybe the setYear functions are updated later?
+    const nextYear = () => {
+        if ((currentYear + 1) > 2023) {
+            setFirstYear(false);//re-enable previous year button
+        }
+        if ((currentMonth) === 0) {
+            setFirstMonth(false);//re-enable previous month button
+        }
+        setCurrentYear(currentYear + 1);
+    }
+    const prevYear = () => {
+        //IGDA club revived in 2023, prevent calendar from going further
+        //toggling disabled state should disable all mouse events
+        setCurrentYear(currentYear - 1);
+        if ((currentYear - 1) <= 2023) {
+            setFirstYear(true);//disable previous year button
+            if ((currentMonth) === 0) {
+                setFirstMonth(true);//disable previous month button
+            }
+        }
+    }
 
     // Filter event list for a specific date
     const getEventForDate = (date) =>
@@ -129,11 +165,37 @@ function CalendarPage() {
                     <div className="col-md-9">
                         <div className="calendar-container shadow-sm rounded-3 p-3">
                             <div className="d-flex justify-content-between align-items-center mb-3">
-                                <button className="btn btn-outline-dark" onClick={prevMonth}>‹</button>
+                                <div>
+                                    <button id="prevYear" className="btn btn-outline-dark" onClick={prevYear} disabled={firstYear} style={{marginRight: "5px"}}>
+                                        <img className="img-fluid"
+                                             src={`${process.env.PUBLIC_URL}/icons/much-less-than.png`} alt="previous year"
+                                             style={{display:"inline-block", width:"18px", height:"18px", verticalAlign: "-.125em"}}
+                                        />
+                                    </button>
+                                    <button id="prevMonth" className="btn btn-outline-dark" disabled={firstMonth} onClick={prevMonth}>
+                                        <img className="img-fluid"
+                                             src={`${process.env.PUBLIC_URL}/icons/less-than.png`} alt="previous month"
+                                             style={{display:"inline-block", width:"18px", height:"18px", verticalAlign: "-.125em"}}
+                                        />
+                                    </button>
+                                </div>
                                 <h4 className="mb-0">
                                     {monthNames[currentMonth]} {currentYear}
                                 </h4>
-                                <button className="btn btn-outline-dark" onClick={nextMonth}>›</button>
+                                <div>
+                                    <button id="nextMonth" className="btn btn-outline-dark" onClick={nextMonth} style={{marginRight: "5px"}}>
+                                        <img className="img-fluid"
+                                             src={`${process.env.PUBLIC_URL}/icons/greater-than.png`} alt="next month"
+                                             style={{display:"inline-block", width:"18px", height:"18px", verticalAlign: "-.125em"}}
+                                        />
+                                    </button>
+                                    <button id="nextYear" className="btn btn-outline-dark" onClick={nextYear}>
+                                        <img className="img-fluid"
+                                             src={`${process.env.PUBLIC_URL}/icons/much-greater-than.png`} alt="next year"
+                                             style={{display:"inline-block", width:"18px", height:"18px", verticalAlign: "-.125em"}}
+                                        />
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="calendar-grid">
