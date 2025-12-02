@@ -1,0 +1,34 @@
+.about-page .info-card,
+.about-page .what-we-do-card,
+.about-page .eboard-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-page .info-card:hover,
+.about-page .what-we-do-card:hover,
+.about-page .eboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.eboard-card .email-link {
+  text-decoration: none;
+}
+.eboard-card .email-link:hover {
+  text-decoration: underline;
+}
+
+.join-card {
+  border: 2px solid #a00;
+  border-radius: 12px;
+  background-color: #fffaf9;
+}
+.join-card .btn-danger {
+  background-color: #a00;
+  border-color: #a00;
+}
+.join-card .btn-danger:hover {
+  background-color: #8b0000;
+}
+

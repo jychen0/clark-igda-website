@@ -1,0 +1,27 @@
+.portfolio-form .card {
+  max-width: 700px;
+  border-radius: 12px;
+}
+
+.portfolio-form label {
+  font-weight: 500;
+}
+
+.portfolio-form .form-control,
+.portfolio-form .form-select {
+  border-radius: 8px;
+}
+
+.timeslot-box {
+  background-color: #fff6f6;
+  border: 1px solid #e0b4b4;
+}
+
+.portfolio-form .btn-danger {
+  background-color: #a00;
+  border-color: #a00;
+}
+
+.portfolio-form .btn-danger:hover {
+  background-color: #8b0000;
+}

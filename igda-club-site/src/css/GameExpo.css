@@ -1,0 +1,57 @@
+.gameexpo-page .event-card {
+  max-width: 600px;
+  border-radius: 16px;
+  background-color: #fff;
+}
+
+.countdown-box {
+  text-align: center;
+}
+
+.countdown-number {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #a00;
+}
+
+.countdown-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.registration-card {
+  border: 2px solid #a00;
+  border-radius: 12px;
+  background-color: #fffaf9;
+}
+
+.registration-card .btn-danger {
+  background-color: #a00;
+  border-color: #a00;
+}
+
+.registration-card .btn-outline-danger:hover {
+  background-color: #a00;
+  color: #fff;
+}
+
+.layout-card img {
+  border-radius: 8px 8px 0 0;
+  height: 250px;
+  object-fit: cover;
+}
+
+.layout-notes {
+  background-color: #fffdfd;
+  border-radius: 12px;
+}
+
+.what-card {
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+.what-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}

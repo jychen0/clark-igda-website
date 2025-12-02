@@ -1,0 +1,21 @@
+.gameexpo-form .card {
+  max-width: 700px;
+  border-radius: 12px;
+}
+
+.gameexpo-form label {
+  font-weight: 500;
+}
+
+.gameexpo-form .form-control {
+  border-radius: 8px;
+}
+
+.gameexpo-form .btn-danger {
+  background-color: #a00;
+  border-color: #a00;
+}
+
+.gameexpo-form .btn-danger:hover {
+  background-color: #8b0000;
+}
