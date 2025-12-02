@@ -3,17 +3,21 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 
+const cors=require("cors")
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public")); //might be redundant
+app.use(express.static(__dirname + "/client")); //this should allow us to load any files within this subdirectory
 
-mongoose.connect('mongodb://localhost:27017/movieDB', {})
+mongoose.connect('mongodb://localhost:27017/eventDB', {})
     .then(function (db) {
         console.log("db connected");
     });
 
 //frontend on port 3000
-app.listen(3001, function () {
-    console.log("backend server started at 3001");
+const port = 3001;
+app.listen(port, function () {
+    console.log(`Server listening on port ${port}`);
 });
 
 app.get('/', function (req, res) {
@@ -134,10 +138,10 @@ const eventSchema={
     },
 }
 
-const Event=mongoose.model('Events',eventSchema);
+const Event=mongoose.model('Event',eventSchema);
 
-app.get('/get-details', function (req, res) {
-    res.sendFile(__dirname + "/public/detail.html");
+app.get('/test', function (req, res) {
+    res.send('it works now')
 });
 
 app.get("/get-all-events", function (req, res) {

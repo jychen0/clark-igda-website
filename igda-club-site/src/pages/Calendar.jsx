@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/Calendar.css";
 import GenericHeader from "../components/GenericHeader";
 
@@ -6,29 +6,49 @@ function CalendarPage() {
     const today = new Date();
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());
     const [currentYear, setCurrentYear] = useState(today.getFullYear());
-
+    //used to prevent user from going past January 2023 in the Calendar
     const [firstYear, setFirstYear] = useState(false);
     const [firstMonth, setFirstMonth] = useState(false);
+    //variables for getting info from DB
+    const [events, setEvents] = useState([]);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            //asynchronous function
+            try{
+                const res =await fetch("/get-all-events")
+                if(!res.ok){
+                    throw new Error("Failed fetching events, error:"+res.statusText);
+                }
+                const data = await res.json();
+                if(data.message==="success"){
+                    setEvents(data.data);
+                }else{
+                    setError(data.message);
+                }
+            } catch (err) {
+                setError(err.message);
+            }
+        }
+        fetchEvents();
+    }, [])
 
     // Track active filters
     const [activeFilters, setActiveFilters] = useState([
-        "Game Jam",
-        "Workshop",
-        "Speaker",
-        "Social",
-        "Showcase",
+        "Expo", //expo
+        "Game Jam", //game jam
+        "Asset Jam", //asset jam
+        "Workshop", //workshop
+        "Industry Talk", //talk
+        "Mixer",  //mixer
+        "Info Session", //info session
+        "Field Trip", //field trip
     ]);
 
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
-    ];
-
-    // Placeholder events (MongoDB later)
-    const events = [
-        { date: new Date(2025, 10, 15), title: "Game Jam 2025", type: "Game Jam" },
-        { date: new Date(2025, 10, 18), title: "Unity Workshop", type: "Workshop" },
-        { date: new Date(2025, 10, 22), title: "Industry Speaker Series", type: "Speaker" },
     ];
 
     // Calendar logic
@@ -54,7 +74,6 @@ function CalendarPage() {
             setFirstMonth(false); //re-enable previous month button
         }
     };
-
     const prevMonth = () => {
         if (currentMonth === 0) {
             setCurrentMonth(11);
@@ -97,23 +116,29 @@ function CalendarPage() {
     const getEventForDate = (date) =>
         events.filter(
             (event) =>
-                event.date.getFullYear() === date.getFullYear() &&
-                event.date.getMonth() === date.getMonth() &&
-                event.date.getDate() === date.getDate() &&
-                activeFilters.includes(event.type)
+                (
+                    //start time is within day
+                    (date.getTime() <= new Date(event.date.start).getTime() && new Date(event.date.start).getTime() < (date.getTime() + 86400000)) ||
+                    //end time is within day
+                    (date.getTime() <= new Date(event.date.end).getTime() && new Date(event.date.end).getTime() < (date.getTime() + 86400000)) ||
+                    //start time is before & end time is after day
+                    //this case is only reached during game & asset jams, all other events the first testcase is enough
+                    (date.getTime() > new Date(event.date.start).getTime() && new Date(event.date.end).getTime() > (date.getTime() + 86400000))
+                )
+                && activeFilters.includes(event.eventType)
         );
 
     // Filter control logic
-    const toggleFilter = (type) => {
-        if (activeFilters.includes(type)) {
-            setActiveFilters(activeFilters.filter((t) => t !== type));
+    const toggleFilter = (eventType) => {
+        if (activeFilters.includes(eventType)) {
+            setActiveFilters(activeFilters.filter((t) => t !== eventType));
         } else {
-            setActiveFilters([...activeFilters, type]);
+            setActiveFilters([...activeFilters, eventType]);
         }
     };
 
     const selectAll = () => {
-        setActiveFilters(["Game Jam", "Workshop", "Speaker", "Social", "Showcase"]);
+        setActiveFilters(["Expo", "Game Jam", "Asset Jam", "Workshop", "Industry Talk", "Mixer", "Info Session", "Field Trip"]);
     };
 
     const clearAll = () => {
@@ -135,7 +160,7 @@ function CalendarPage() {
                             <div className="card-body">
                                 <h5 className="card-title">Event Filters</h5>
                                 <ul className="list-unstyled">
-                                    {["Game Jam", "Workshop", "Speaker", "Social", "Showcase"].map((type) => (
+                                    {["Expo", "Game Jam", "Asset Jam", "Workshop", "Industry Talk", "Mixer", "Info Session", "Field Trip"].map((type) => (
                                         <li key={type} className="mb-2">
                                             <label>
                                                 <input
@@ -205,6 +230,8 @@ function CalendarPage() {
 
                                 {calendarDays.map((date, i) => {
                                     const dayEvents = date ? getEventForDate(date) : [];
+                                    console.log(date);
+                                    console.log(dayEvents);
                                     return (
                                         <div key={i} className="calendar-cell">
                                             {date && (
@@ -223,9 +250,9 @@ function CalendarPage() {
                                                     {dayEvents.map((event, idx) => (
                                                         <div
                                                             key={idx}
-                                                            className={`calendar-event event-${event.type.toLowerCase().replace(" ", "-")}`}
+                                                            className={`calendar-event event-${event.eventType.toLowerCase().replace(" ", "-")}`}
                                                         >
-                                                            {event.title}
+                                                            {event.eventName}
                                                         </div>
                                                     ))}
                                                 </>
