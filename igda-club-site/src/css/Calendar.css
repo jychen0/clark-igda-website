@@ -1,4 +1,4 @@
-.calendar-container {
+    .calendar-container {
     background-color: #fff;
 }
 
@@ -20,9 +20,11 @@
 .calendar-cell {
     background-color: #fff;
     min-height: 90px;
+    max-height: 90px;
     padding: 5px;
     border: 1px solid #eee;
     position: relative;
+    overflow: hidden;
 }
 
 .calendar-date {
@@ -53,17 +55,105 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
 }
 
-.event-workshop {
+.event-details-container {
+    width: 100%;
+}
+
+.event-details-box {
+    background: #fff;
+    min-height: 120px;
+    border: 1px solid #ddd;
+}
+
+.event-details-box.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+}
+
+.event-expo, .legend-color.event-expo {
+    background-color: #e67e22;
+}
+
+.event-game-jam, .legend-color.event-game-jam {
+    background-color: #8e44ad;
+}
+
+.event-asset-jam, .legend-color.event-asset-jam {
+    background-color: #16a085;
+}
+
+.event-workshop, .legend-color.event-workshop {
     background-color: #c0392b;
 }
-.event-speaker {
-    background-color: #6c3483;
+
+.event-industry-talk, .legend-color.event-industry-talk {
+    background-color: #2980b9;
 }
-.event-social {
-    background-color: #2874a6;
+
+.event-mixer, .legend-color.event-mixer {
+    background-color: #d35400;
 }
-.event-showcase {
-    background-color: #117864;
+
+.event-info-session, .legend-color.event-info-session {
+    background-color: #7f8c8d;
+}
+
+.event-field-trip, .legend-color.event-field-trip {
+    background-color: #27ae60;
+}
+
+.calendar-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.reset-button {
+    width: fit-content;
+    padding: 6px 14px;
+    background-color: #2b2b2b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.reset-button:hover {
+    background-color: #444;
+}
+
+.calendar-legend-box {
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 15px;
+    margin-top: 15px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); 
+}
+
+.calendar-legend {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 20px; 
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 8px;
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../css/About.css";
 import GenericHeader from "../components/GenericHeader";
 
@@ -144,9 +145,9 @@ function About() {
                 beginning of each semester. E-Board members help plan events,
                 manage club operations, and shape the future of IGDA at Clark.
               </p>
-              <button className="btn btn-outline-secondary" disabled>
-                Eboard Application Form
-              </button>
+              <Link to="/eboard/application" className="btn btn-outline-secondary">
+                E-Board Application Form
+              </Link>
             </div>
           </div>
         </div>

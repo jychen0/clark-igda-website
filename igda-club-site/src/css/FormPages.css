@@ -1,0 +1,39 @@
+.form-page {
+  color: #333;
+}
+
+.form-page .alert {
+  background-color: #fbeaea;
+  border-radius: 12px;
+}
+
+.form-page .card {
+  border-radius: 12px;
+}
+
+.form-page label {
+  font-weight: 600;
+}
+
+.form-page input,
+.form-page textarea,
+.form-page select {
+  border-radius: 8px;
+}
+
+.form-page .btn-danger {
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.form-page .btn-outline-danger {
+  border-radius: 10px;
+}
+
+.form-page .text-danger {
+  color: #a11812 !important;
+}
+
+.form-page a {
+  text-decoration: none;
+}

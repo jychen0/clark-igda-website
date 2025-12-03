@@ -13,18 +13,24 @@ function CalendarPage() {
     const [events, setEvents] = useState([]);
     const [error, setError] = useState(null);
 
+    // used to select an event to show details
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const handleEventClick = (event) => {
+        setSelectedEvent(event);
+    };
+
     useEffect(() => {
         const fetchEvents = async () => {
             //asynchronous function
-            try{
-                const res =await fetch("/get-all-events")
-                if(!res.ok){
-                    throw new Error("Failed fetching events, error:"+res.statusText);
+            try {
+                const res = await fetch("/get-all-events")
+                if (!res.ok) {
+                    throw new Error("Failed fetching events, error:" + res.statusText);
                 }
                 const data = await res.json();
-                if(data.message==="success"){
+                if (data.message === "success") {
                     setEvents(data.data);
-                }else{
+                } else {
                     setError(data.message);
                 }
             } catch (err) {
@@ -145,6 +151,15 @@ function CalendarPage() {
         setActiveFilters([]);
     };
 
+    const resetToToday = () => {
+        const now = new Date();
+        setCurrentMonth(now.getMonth());
+        setCurrentYear(now.getFullYear());
+
+        setFirstYear(now.getFullYear() <= 2023);
+        setFirstMonth(now.getFullYear() <= 2023 && now.getMonth() === 0);
+    };
+
     return (
         <>
             <GenericHeader
@@ -184,6 +199,34 @@ function CalendarPage() {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Controls + Legend Box (match filter box styling) */}
+                        <div className="card shadow-sm border-0 mt-3">
+                            <div className="card-body">
+                                <button className="btn btn-outline-primary w-100 mb-3" onClick={resetToToday}>
+                                    Reset to Today
+                                </button>
+
+                                <h6 className="mb-2">Legend</h6>
+                                <div className="calendar-legend">
+                                    {[
+                                        ["Expo", "event-expo"],
+                                        ["Game Jam", "event-game-jam"],
+                                        ["Asset Jam", "event-asset-jam"],
+                                        ["Workshop", "event-workshop"],
+                                        ["Industry Talk", "event-industry-talk"],
+                                        ["Mixer", "event-mixer"],
+                                        ["Info Session", "event-info-session"],
+                                        ["Field Trip", "event-field-trip"],
+                                    ].map(([label, cls]) => (
+                                        <div key={label} className="legend-item">
+                                            <span className={`legend-color ${cls}`}></span> {label}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     {/* Calendar */}
@@ -191,16 +234,16 @@ function CalendarPage() {
                         <div className="calendar-container shadow-sm rounded-3 p-3">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <div>
-                                    <button id="prevYear" className="btn btn-outline-dark" onClick={prevYear} disabled={firstYear} style={{marginRight: "5px"}}>
+                                    <button id="prevYear" className="btn btn-outline-dark" onClick={prevYear} disabled={firstYear} style={{ marginRight: "5px" }}>
                                         <img className="img-fluid"
-                                             src={`${process.env.PUBLIC_URL}/icons/much-less-than.png`} alt="previous year"
-                                             style={{display:"inline-block", width:"18px", height:"18px", verticalAlign: "-.125em"}}
+                                            src={`${process.env.PUBLIC_URL}/icons/much-less-than.png`} alt="previous year"
+                                            style={{ display: "inline-block", width: "18px", height: "18px", verticalAlign: "-.125em" }}
                                         />
                                     </button>
                                     <button id="prevMonth" className="btn btn-outline-dark" disabled={firstMonth} onClick={prevMonth}>
                                         <img className="img-fluid"
-                                             src={`${process.env.PUBLIC_URL}/icons/less-than.png`} alt="previous month"
-                                             style={{display:"inline-block", width:"18px", height:"18px", verticalAlign: "-.125em"}}
+                                            src={`${process.env.PUBLIC_URL}/icons/less-than.png`} alt="previous month"
+                                            style={{ display: "inline-block", width: "18px", height: "18px", verticalAlign: "-.125em" }}
                                         />
                                     </button>
                                 </div>
@@ -208,16 +251,16 @@ function CalendarPage() {
                                     {monthNames[currentMonth]} {currentYear}
                                 </h4>
                                 <div>
-                                    <button id="nextMonth" className="btn btn-outline-dark" onClick={nextMonth} style={{marginRight: "5px"}}>
+                                    <button id="nextMonth" className="btn btn-outline-dark" onClick={nextMonth} style={{ marginRight: "5px" }}>
                                         <img className="img-fluid"
-                                             src={`${process.env.PUBLIC_URL}/icons/greater-than.png`} alt="next month"
-                                             style={{display:"inline-block", width:"18px", height:"18px", verticalAlign: "-.125em"}}
+                                            src={`${process.env.PUBLIC_URL}/icons/greater-than.png`} alt="next month"
+                                            style={{ display: "inline-block", width: "18px", height: "18px", verticalAlign: "-.125em" }}
                                         />
                                     </button>
                                     <button id="nextYear" className="btn btn-outline-dark" onClick={nextYear}>
                                         <img className="img-fluid"
-                                             src={`${process.env.PUBLIC_URL}/icons/much-greater-than.png`} alt="next year"
-                                             style={{display:"inline-block", width:"18px", height:"18px", verticalAlign: "-.125em"}}
+                                            src={`${process.env.PUBLIC_URL}/icons/much-greater-than.png`} alt="next year"
+                                            style={{ display: "inline-block", width: "18px", height: "18px", verticalAlign: "-.125em" }}
                                         />
                                     </button>
                                 </div>
@@ -237,13 +280,12 @@ function CalendarPage() {
                                             {date && (
                                                 <>
                                                     <div
-                                                        className={`calendar-date ${
-                                                            date.getDate() === today.getDate() &&
+                                                        className={`calendar-date ${date.getDate() === today.getDate() &&
                                                             date.getMonth() === today.getMonth() &&
                                                             date.getFullYear() === today.getFullYear()
-                                                                ? "today"
-                                                                : ""
-                                                        }`}
+                                                            ? "today"
+                                                            : ""
+                                                            }`}
                                                     >
                                                         {date.getDate()}
                                                     </div>
@@ -251,10 +293,12 @@ function CalendarPage() {
                                                         <div
                                                             key={idx}
                                                             className={`calendar-event event-${event.eventType.toLowerCase().replace(" ", "-")}`}
+                                                            onClick={() => handleEventClick(event)}
                                                         >
                                                             {event.eventName}
                                                         </div>
                                                     ))}
+
                                                 </>
                                             )}
                                         </div>
@@ -264,6 +308,18 @@ function CalendarPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* Event Details Box */}
+                {selectedEvent && (
+                    <div className="event-details-container mt-4">
+                        <div className="event-details-box shadow-sm p-3 rounded-3">
+                            <h5>{selectedEvent.eventName}</h5>
+                            <p><strong>Type:</strong> {selectedEvent.eventType}</p>
+                            <p><strong>Starts:</strong> {new Date(selectedEvent.date.start).toLocaleString()}</p>
+                            <p><strong>Ends:</strong> {new Date(selectedEvent.date.end).toLocaleString()}</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     );

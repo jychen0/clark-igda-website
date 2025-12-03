@@ -1,0 +1,22 @@
+.gamejam-page .jam-card {
+  max-width: 600px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.gamejam-page .jam-entry {
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+
+.gamejam-page .jam-entry:hover {
+  transform: translateY(-4px);
+}
+
+.gamejam-page .badge {
+  font-size: 0.75rem;
+}
+
+.filters select {
+  border-radius: 8px;
+}

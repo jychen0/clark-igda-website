@@ -4,9 +4,12 @@ import Calendar from './pages/Calendar';
 import About from './pages/About';
 import Events from "./pages/Events";
 import GameExpo from "./pages/GameExpo";
+import GameJam from "./pages/GameJam";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
+import GameJamRegister from "./pages/GameJamRegister";
+import EBoardApplication from "./pages/EBoardApplication";
 import GameExpoForm from "./pages/GameExpoForm";
 import PortfolioReviewForm from "./pages/PortfolioReviewForm";
 
@@ -23,7 +26,10 @@ function App() {
                         <Route path="/about" element={<About />} />
                         <Route path="/events/talks" element={<Events />} />
                         <Route path="/events/expo" element={<GameExpo />} />
+                        <Route path="/events/game-jams" element={<GameJam />} />
 
+                        <Route path="/events/game-jams/register" element={<GameJamRegister />} />
+                        <Route path="/eboard/application" element={<EBoardApplication />} />
                         <Route path="/events/expo/application" element={<GameExpoForm />} />
                         <Route path="/events/expo/portfolio-review" element={<PortfolioReviewForm />} />
                     </Routes>
