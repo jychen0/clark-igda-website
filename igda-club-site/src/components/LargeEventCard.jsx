@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../css/EventCard.css";
 
 const day = [
@@ -15,8 +16,12 @@ function LargeEventCard(props) {
     const location = event.location.held ? "In Person" : "Virtual"
     const startTime = new Date(event.date.start);
     const endTime = new Date(event.date.end);
-    const timeFrame = startTime.getDate() === endTime.getDate() ? day[startTime.getDay()]+", "+month[startTime.getMonth()]+" "+startTime.getDate() :
-        day[startTime.getDay()]+", "+month[startTime.getMonth()]+" "+startTime.getDate()+" to "+day[endTime.getDay()]+", "+month[endTime.getMonth()]+" "+endTime.getDate()
+    const timeFrame = startTime.getDate() === endTime.getDate() ? day[startTime.getDay()] + ", " + month[startTime.getMonth()] + " " + startTime.getDate() :
+        day[startTime.getDay()] + ", " + month[startTime.getMonth()] + " " + startTime.getDate() + " to " + day[endTime.getDay()] + ", " + month[endTime.getMonth()] + " " + endTime.getDate()
+
+    const eventYear = startTime.getFullYear();
+    const eventMonth = startTime.getMonth();
+    const eventDay = startTime.getDate();
 
     const speakers = event.speakers;
     speakers.forEach(speaker => {
@@ -24,7 +29,7 @@ function LargeEventCard(props) {
     })
     return (
         <div className="card eventCard">
-            <img className="card-img-top" src={`${process.env.PUBLIC_URL}/assets/event_posters/${props.event.posterIMG}`} alt={event.posterIMG}/>
+            <img className="card-img-top" src={`${process.env.PUBLIC_URL}/assets/event_posters/${props.event.posterIMG}`} alt={event.posterIMG} />
             <div className="card-body">
                 <h5 className="card-title">{event.eventName}</h5>
                 <p className="card-text">{event.overview}</p>
@@ -32,7 +37,12 @@ function LargeEventCard(props) {
             <ul className="list-group list-group-flush">
                 <li className="list-group-item">event speaker</li>
                 <li className="list-group-item">{location} - {event.location.location}</li>
-                <a href="/calendar" className="card-link">{timeFrame}</a>
+                <Link
+                    to={`/calendar?year=${eventYear}&month=${eventMonth}&day=${eventDay}`}
+                    className="card-link"
+                >
+                    {timeFrame}
+                </Link>
             </ul>
             <div className="card-body">
                 <a href="/home" className="card-link">Event info link</a>

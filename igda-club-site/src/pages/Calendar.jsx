@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "../css/Calendar.css";
+import { useLocation } from "react-router-dom";
 import GenericHeader from "../components/GenericHeader";
 
 function CalendarPage() {
     const today = new Date();
-    const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-    const [currentYear, setCurrentYear] = useState(today.getFullYear());
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+
+    const queryMonth = parseInt(queryParams.get("month"));
+    const queryYear = parseInt(queryParams.get("year"));
+    const queryDay = parseInt(queryParams.get("day"));
+
+    const [currentMonth, setCurrentMonth] = useState(!isNaN(queryMonth) ? queryMonth : today.getMonth());
+    const [currentYear, setCurrentYear] = useState(!isNaN(queryYear) ? queryYear : today.getFullYear());
+    const [selectedDay, setSelectedDay] = useState(!isNaN(queryDay) ? queryDay : null);
+
     //used to prevent user from going past January 2023 in the Calendar
     const [firstYear, setFirstYear] = useState(false);
     const [firstMonth, setFirstMonth] = useState(false);
