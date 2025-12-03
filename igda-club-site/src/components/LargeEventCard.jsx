@@ -12,9 +12,7 @@ const month = [
 function LargeEventCard(props) {
     const event = props.event;
     const event_classes = "card "
-    const posterURL = '../assets/event_posters/' + props.event.posterIMG;
     const location = event.location.held ? "In Person" : "Virtual"
-
     const startTime = new Date(event.date.start);
     const endTime = new Date(event.date.end);
     const timeFrame = startTime.getDate() === endTime.getDate() ? day[startTime.getDay()]+", "+month[startTime.getMonth()]+" "+startTime.getDate() :
@@ -26,7 +24,7 @@ function LargeEventCard(props) {
     })
     return (
         <div className="card eventCard">
-            <img className="card-img-top" src={posterURL} alt={event.posterIMG}/>
+            <img className="card-img-top" src={`${process.env.PUBLIC_URL}/assets/event_posters/${props.event.posterIMG}`} alt={event.posterIMG}/>
             <div className="card-body">
                 <h5 className="card-title">{event.eventName}</h5>
                 <p className="card-text">{event.overview}</p>

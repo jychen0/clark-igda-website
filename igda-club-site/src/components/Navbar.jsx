@@ -8,10 +8,11 @@ function Navbar() {
             <div className="container">
                 <Link className="navbar-brand d-flex align-items-center" to="/">
                     <img
-                        src="../assets/igda_clark_logo.png"
+                        src={`${process.env.PUBLIC_URL}/assets/igda_clark_logo.png`}
                         alt="IGDA Logo"
-                        width="40"
-                        height="40"
+                        width="40px"
+                        max-width="40px"
+                        height="40px"
                         className="me-2"
                     />
                     IGDA at Clark University
