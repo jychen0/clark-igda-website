@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Calendar from './pages/Calendar';
 import About from './pages/About';
+import Events from "./pages/Events";
 import GameExpo from "./pages/GameExpo";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -20,6 +21,7 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="/calendar" element={<Calendar />} />
                         <Route path="/about" element={<About />} />
+                        <Route path="/events/talks" element={<Events />} />
                         <Route path="/events/expo" element={<GameExpo />} />
 
                         <Route path="/events/expo/application" element={<GameExpoForm />} />
