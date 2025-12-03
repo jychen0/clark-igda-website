@@ -9,7 +9,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
 import GameJamRegister from "./pages/GameJamRegister";
-import EBoardApplication from "./pages/EBoardApplication";
+import EBoardApplication from "./pages/EBoardApplication"
 import GameExpoForm from "./pages/GameExpoForm";
 import PortfolioReviewForm from "./pages/PortfolioReviewForm";
 
