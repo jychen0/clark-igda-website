@@ -2,53 +2,65 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../css/EventCard.css";
 
-const day = [
-    "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
-];
-const month = [
+function LargeEventCard({ event }) {
+  const location = event.location.held ? "In Person" : "Virtual";
+  const startTime = new Date(event.date.start);
+  const endTime = new Date(event.date.end);
+
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const monthNames = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
-];
+  ];
 
-function LargeEventCard(props) {
-    const event = props.event;
-    const event_classes = "card "
-    const location = event.location.held ? "In Person" : "Virtual"
-    const startTime = new Date(event.date.start);
-    const endTime = new Date(event.date.end);
-    const timeFrame = startTime.getDate() === endTime.getDate() ? day[startTime.getDay()] + ", " + month[startTime.getMonth()] + " " + startTime.getDate() :
-        day[startTime.getDay()] + ", " + month[startTime.getMonth()] + " " + startTime.getDate() + " to " + day[endTime.getDay()] + ", " + month[endTime.getMonth()] + " " + endTime.getDate()
+  const timeFrame =
+    startTime.getDate() === endTime.getDate()
+      ? `${dayNames[startTime.getDay()]}, ${monthNames[startTime.getMonth()]} ${startTime.getDate()}`
+      : `${dayNames[startTime.getDay()]}, ${monthNames[startTime.getMonth()]} ${startTime.getDate()} - ${dayNames[endTime.getDay()]}, ${monthNames[endTime.getMonth()]} ${endTime.getDate()}`;
 
-    const eventYear = startTime.getFullYear();
-    const eventMonth = startTime.getMonth();
-    const eventDay = startTime.getDate();
+  const eventYear = startTime.getFullYear();
+  const eventMonth = startTime.getMonth();
+  const eventDay = startTime.getDate();
 
-    const speakers = event.speakers;
-    speakers.forEach(speaker => {
-        const speakerText = speaker.speakerName
-    })
-    return (
-        <div className="card eventCard">
-            <img className="card-img-top" src={`${process.env.PUBLIC_URL}/assets/event_posters/${props.event.posterIMG}`} alt={event.posterIMG} />
-            <div className="card-body">
-                <h5 className="card-title">{event.eventName}</h5>
-                <p className="card-text">{event.overview}</p>
-            </div>
-            <ul className="list-group list-group-flush">
-                <li className="list-group-item">event speaker</li>
-                <li className="list-group-item">{location} - {event.location.location}</li>
-                <Link
-                    to={`/calendar?year=${eventYear}&month=${eventMonth}&day=${eventDay}`}
-                    className="card-link"
-                >
-                    {timeFrame}
-                </Link>
-            </ul>
-            <div className="card-body">
-                <a href="/home" className="card-link">Event info link</a>
-            </div>
+  return (
+    <div className="large-event-card card mb-4 shadow-sm border-0 overflow-hidden">
+      <div className="row g-0">
+        <div className="col-md-4">
+          <img
+            src={`${process.env.PUBLIC_URL}/assets/event_posters/${event.posterIMG}`}
+            alt={event.eventName}
+            className="img-fluid h-100 w-100 object-fit-cover"
+          />
         </div>
-    )
+
+        <div className="col-md-8">
+          <div className="card-body d-flex flex-column h-100 justify-content-between">
+            <div>
+              <h5 className="card-title fw-bold">{event.eventName}</h5>
+              <p className="card-text text-muted mb-2">{event.overview}</p>
+              <p className="card-text small mb-1">
+                <strong>Location:</strong> {location} — {event.location.location}
+              </p>
+              <p className="card-text small mb-1">
+                <strong>Date:</strong>{" "}
+                <Link
+                  to={`/calendar?year=${eventYear}&month=${eventMonth}&day=${eventDay}`}
+                  className="text-decoration-none"
+                >
+                  {timeFrame}
+                </Link>
+              </p>
+            </div>
+            <div className="mt-3">
+              <Link to="/home" className="btn btn-outline-danger btn-sm">
+                View Event Info
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default LargeEventCard;
