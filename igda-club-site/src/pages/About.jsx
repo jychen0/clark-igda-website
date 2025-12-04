@@ -13,6 +13,12 @@ function About() {
     { name: "Diego Delmont", role: "Event Staff", email: "ddelmont@clarku.edu" },
   ];
 
+    function getRandomInteger() {
+        return Math.floor(Math.random() * (1));
+    }
+
+    const IMG = (Math.random() * 10) < 5 ? "IMG_3477.jpg" : "IMG_3473.jpg";
+
   return (
     <>
       <GenericHeader
@@ -112,6 +118,12 @@ function About() {
               </div>
             </div>
           ))}
+            <img
+                src={`${process.env.PUBLIC_URL}/assets/${IMG}`}
+                alt={"Charlie in captivity"}
+                className="img-fluid object-fit-cover"
+                style={{ width: 600, maxHeight: 600, margin: "auto"}}
+            />
         </div>
 
         {/* --- How to Join --- */}
