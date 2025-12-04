@@ -122,7 +122,7 @@ function About() {
                 src={`${process.env.PUBLIC_URL}/assets/${IMG}`}
                 alt={"Charlie in captivity"}
                 className="img-fluid object-fit-cover"
-                style={{ width: 600, maxHeight: 600, margin: "auto"}}
+                style={{ width: 600, maxHeight: 800, margin: "auto"}}
             />
         </div>
 
