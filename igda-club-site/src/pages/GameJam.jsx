@@ -6,26 +6,11 @@ import Jam from "../components/JamRegister/Jam";
 
 function GameJam() {
     const [yearFilter, setYearFilter] = useState("All Years");
-    const [categoryFilter, setCategoryFilter] = useState("All Categories");
-
-    // const jams = [
-    // {
-    //   title: "2023 Harvest Game Jam",
-    //   theme: "Chaos & Order",
-    //   date: "October 12-14, 2024",
-    //   category: "Best Overall",
-    //   winner: "Balance Breaker",
-    //   team: "Team Entropy",
-    //   description:
-    //     "A puzzle platformer where you switch between chaotic and ordered dimensions to solve challenges.",
-    // },
-    // ];
-
     const [jams, setJams] = useState([]);
     const [filteredJams, setFilteredJams] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [filterSubmission, setFilterSubmission] = useState("All");
-    const [filterAwards, setFilterAwards] = useState("All");
+    const [filterSubmission, setFilterSubmission] = useState("All Game Jams");
+    const [filterAwards, setFilterAwards] = useState("All Games");
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -52,37 +37,25 @@ function GameJam() {
 
         if (searchTerm.trim()) {
             const lowerSearch = searchTerm.toLowerCase();
-            filteredJams = filteredJams.filter((event) => {
-                const nameMatch = event.eventName?.toLowerCase().includes(lowerSearch);
-                const overviewMatch = event.overview?.toLowerCase().includes(lowerSearch);
-                const locationMatch = event.location?.location?.toLowerCase().includes(lowerSearch);
-                return nameMatch || overviewMatch || locationMatch;
+            filteredJams = filteredJams.filter((jam) => {
+                const submissionMatch = jam.gameName?.toLowerCase().includes(lowerSearch);
+                const devMatch = jam.developers?.toLowerCase().includes(lowerSearch);
+                const nameMatch = jam.jamSubmission?.toLowerCase().includes(lowerSearch);
+                return submissionMatch || devMatch || nameMatch;
             });
         }
 
-        if (filterSubmission !== "All") {
-            filteredJams = filteredJams.filter((jam) => jam.jamSubmission === filterSubmission);
-        }
-
-        if (filterAwards !== "All") {
-            filteredJams = filteredJams.filter((jam) => !!jam.awards);
+        if (filterSubmission !== "All Game Jams") {
+            filteredJams = filteredJams.filter((jam) => jam.gameName === filterSubmission);
         }
         if (yearFilter !== "All Years") {
-            filteredJams = filteredJams.filter((jam) => jam.date.includes(yearFilter));
+            filteredJams = filteredJams.filter((jam) => jam.gameName.includes(yearFilter));
         }
-        if (categoryFilter !== "All Categories") {
-            filteredJams = filteredJams.filter((jam) => jam.category === categoryFilter);
+        if (filterAwards !== "All Games") {
+            filteredJams = filteredJams.filter((jam) => jam.awards[0] === filterAwards);
         }
-
-
         setFilteredJams(filteredJams);
-    }, [searchTerm, filterSubmission, filterAwards, yearFilter, categoryFilter, jams]);
-
-  // const filtered = jams.filter(
-  //   (j) =>
-  //     (yearFilter === "All Years" || j.date.includes(yearFilter)) &&
-  //     (categoryFilter === "All Categories" || j.category === categoryFilter)
-  // );
+    }, [searchTerm, filterSubmission, filterAwards, yearFilter, jams]);
 
   return (
     <>
@@ -126,12 +99,33 @@ function GameJam() {
             <option>2023</option>
           </select>
 
+            <select
+                className="form-select w-auto"
+                value={filterSubmission}
+                onChange={(e) => setFilterSubmission(e.target.value)}
+            >
+                <option>All Game Jams</option>
+                <option>2023 Revival Jam</option>
+                <option>2023 Harvest Game Jam</option>
+                <option>2023 Halloween Game Jam</option>
+                <option>2023 December Dash Game Jam</option>
+                <option>2024 January Game Jamboree</option>
+                <option>2024 February Frenzy Game Jam</option>
+                <option>2024 Harvest Game Jam</option>
+                <option>2024 Halloween Game Jam</option>
+                <option>2025 Winter Game Jam</option>
+                <option>2025 February Frenzy Game Jam</option>
+                <option>2025 March Madness Game Jam</option>
+                <option>2025 Harvest Game Jam</option>
+                <option>2025 Halloween Game Jam</option>
+            </select>
+
           <select
             className="form-select w-auto"
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
+            value={filterAwards}
+            onChange={(e) => setFilterAwards(e.target.value)}
           >
-              <option>All Categories</option>
+              <option>All Games</option>
               <option>Best Overall</option>
               <option>Worst Overall</option>
               <option>Best Visuals</option>
@@ -144,8 +138,8 @@ function GameJam() {
         </div>
 
         <div className="row">
-          {filteredJams.map((jam, i) => (
-            <Jam event={jam} key={i} />
+          {filteredJams.map((jam) => (
+            <Jam event={jam} />
           ))}
         </div>
       </div>
