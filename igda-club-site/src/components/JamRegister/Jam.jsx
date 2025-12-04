@@ -47,7 +47,7 @@ function Jam({ event }) {
                                 ))}
                             </ul>
                             <a href={event.itchLink} className="btn btn btn-dark mt-auto">
-                                Go to itch page ->
+                                Go to itch page: 
                             </a>
                         </div>
                     </div>
