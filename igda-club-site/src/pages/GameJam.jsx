@@ -1,100 +1,88 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import "../css/GameJam.css";
 import GenericHeader from "../components/GenericHeader";
+import Jam from "../components/JamRegister/Jam";
 
 function GameJam() {
-  const [yearFilter, setYearFilter] = useState("All Years");
-  const [categoryFilter, setCategoryFilter] = useState("All Categories");
+    const [yearFilter, setYearFilter] = useState("All Years");
+    const [categoryFilter, setCategoryFilter] = useState("All Categories");
 
-  const jams = [
-    {
-      title: "Fall 2024 Game Jam",
-      theme: "Chaos & Order",
-      date: "October 12-14, 2024",
-      category: "Best Overall",
-      winner: "Balance Breaker",
-      team: "Team Entropy",
-      description:
-        "A puzzle platformer where you switch between chaotic and ordered dimensions to solve challenges.",
-    },
-    {
-      title: "Fall 2024 Game Jam",
-      theme: "Chaos & Order",
-      date: "October 12-14, 2024",
-      category: "Best Art",
-      winner: "Pixel Pandemonium",
-      team: "The Glitch Squad",
-      description:
-        "A visually stunning arcade game featuring hand-drawn chaotic creatures.",
-    },
-    {
-      title: "Spring 2024 Game Jam",
-      theme: "Growth",
-      date: "March 8-10, 2024",
-      category: "Best Overall",
-      winner: "Seedling",
-      team: "Green Thumbs",
-      description:
-        "A peaceful gardening sim where you cultivate magical plants that affect the game world.",
-    },
-    {
-      title: "Spring 2024 Game Jam",
-      theme: "Growth",
-      date: "March 8-10, 2024",
-      category: "Best Gameplay",
-      winner: "Overgrown",
-      team: "Code Vines",
-      description:
-        "A strategy game where plants grow in real-time and you must manage their expansion.",
-    },
-    {
-      title: "Fall 2023 Game Jam",
-      theme: "Time Loop",
-      date: "November 3-5, 2023",
-      category: "Best Overall",
-      winner: "Groundhog Hour",
-      team: "Temporal Coders",
-      description:
-        "A detective game where you relive the same hour to solve a mystery.",
-    },
-    {
-      title: "Fall 2023 Game Jam",
-      theme: "Time Loop",
-      date: "November 3-5, 2023",
-      category: "Best Audio",
-      winner: "Loop Symphony",
-      team: "Sound Waves",
-      description:
-        "A rhythm game where each loop adds new musical layers.",
-    },
-    {
-      title: "Spring 2023 Game Jam",
-      theme: "Connection",
-      date: "April 14-16, 2023",
-      category: "Best Overall",
-      winner: "Link & Sync",
-      team: "The Networkers",
-      description:
-        "A cooperative puzzle game about connecting circuits to power up systems.",
-    },
-    {
-      title: "Spring 2023 Game Jam",
-      theme: "Connection",
-      date: "April 14-16, 2023",
-      category: "Most Creative",
-      winner: "Social Nodes",
-      team: "Graph Theory",
-      description:
-        "A narrative experience about building relationships in a digital world.",
-    },
-  ];
+    // const jams = [
+    // {
+    //   title: "2023 Harvest Game Jam",
+    //   theme: "Chaos & Order",
+    //   date: "October 12-14, 2024",
+    //   category: "Best Overall",
+    //   winner: "Balance Breaker",
+    //   team: "Team Entropy",
+    //   description:
+    //     "A puzzle platformer where you switch between chaotic and ordered dimensions to solve challenges.",
+    // },
+    // ];
 
-  const filtered = jams.filter(
-    (j) =>
-      (yearFilter === "All Years" || j.date.includes(yearFilter)) &&
-      (categoryFilter === "All Categories" || j.category === categoryFilter)
-  );
+    const [jams, setJams] = useState([]);
+    const [filteredJams, setFilteredJams] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterSubmission, setFilterSubmission] = useState("All");
+    const [filterAwards, setFilterAwards] = useState("All");
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchJams = async () => {
+            try {
+                const res = await fetch("/get-all-jams");
+                if (!res.ok) throw new Error("Failed fetching Jams");
+                const data = await res.json();
+                if (data.message === "success") {
+                    setJams(data.data);
+                    setFilteredJams(data.data);
+                } else {
+                    setError(data.message);
+                }
+            } catch (err) {
+                setError(err.message);
+            }
+        };
+        fetchJams();
+    }, []);
+
+    useEffect(() => {
+        let filteredJams = jams;
+
+        if (searchTerm.trim()) {
+            const lowerSearch = searchTerm.toLowerCase();
+            filteredJams = filteredJams.filter((event) => {
+                const nameMatch = event.eventName?.toLowerCase().includes(lowerSearch);
+                const overviewMatch = event.overview?.toLowerCase().includes(lowerSearch);
+                const locationMatch = event.location?.location?.toLowerCase().includes(lowerSearch);
+                return nameMatch || overviewMatch || locationMatch;
+            });
+        }
+
+        if (filterSubmission !== "All") {
+            filteredJams = filteredJams.filter((jam) => jam.jamSubmission === filterSubmission);
+        }
+
+        if (filterAwards !== "All") {
+            filteredJams = filteredJams.filter((jam) => !!jam.awards);
+        }
+        if (yearFilter !== "All Years") {
+            filteredJams = filteredJams.filter((jam) => jam.date.includes(yearFilter));
+        }
+        if (categoryFilter !== "All Categories") {
+            filteredJams = filteredJams.filter((jam) => jam.category === categoryFilter);
+        }
+
+
+        setFilteredJams(filteredJams);
+    }, [searchTerm, filterSubmission, filterAwards, yearFilter, categoryFilter, jams]);
+
+  // const filtered = jams.filter(
+  //   (j) =>
+  //     (yearFilter === "All Years" || j.date.includes(yearFilter)) &&
+  //     (categoryFilter === "All Categories" || j.category === categoryFilter)
+  // );
 
   return (
     <>
@@ -109,13 +97,13 @@ function GameJam() {
           <div className="card shadow-sm border-0 jam-card mx-auto">
             <div className="card-body">
               <h5 className="text-danger">Next Game Jam</h5>
-              <h4 className="fw-bold">Spring 2025 Game Jam</h4>
+              <h4 className="fw-bold">2025 Winter Game Jam</h4>
               <p className="text-muted mb-1">Theme: TBA</p>
               <p className="text-muted">
-                March 14–16, 2025 • 5:00 PM – 5:00 PM
+                January 30th-February 1st, 2025 • 5:00 PM – 5:00 PM
               </p>
               <p className="text-muted">
-                Location: Clark University Center for Media Arts, Computing, and Design (MACD)
+                Location: Clark University Center for Media Arts, Computing, and Design (CMACD) Second Floor Lobby
               </p>
               <Link to="/events/game-jams/register" className="btn btn-danger mt-3">
                 Sign Up Now
@@ -124,7 +112,7 @@ function GameJam() {
           </div>
         </div>
 
-        <h4 className="text-center mb-4">Previous Game Jams</h4>
+        <h4 className="text-center mb-4">Previous Game Jam Entries</h4>
         <div className="filters d-flex justify-content-center gap-3 mb-4">
           <select
             className="form-select w-auto"
@@ -132,6 +120,8 @@ function GameJam() {
             onChange={(e) => setYearFilter(e.target.value)}
           >
             <option>All Years</option>
+              {/*<option>2026</option>*/}
+              <option>2025</option>
             <option>2024</option>
             <option>2023</option>
           </select>
@@ -141,32 +131,21 @@ function GameJam() {
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
           >
-            <option>All Categories</option>
-            <option>Best Overall</option>
-            <option>Best Art</option>
-            <option>Best Gameplay</option>
-            <option>Best Audio</option>
-            <option>Most Creative</option>
+              <option>All Categories</option>
+              <option>Best Overall</option>
+              <option>Worst Overall</option>
+              <option>Best Visuals</option>
+              <option>Best Art Direction</option>
+              <option>Best Mechanics</option>
+              <option>Most Unique Gameplay Loop</option>
+              <option>Most Unique Mechanics</option>
+              <option>Most Out of The Box</option>
           </select>
         </div>
 
         <div className="row">
-          {filtered.map((jam, i) => (
-            <div key={i} className="col-md-6 col-lg-4 mb-4">
-              <div className="card shadow-sm jam-entry h-100">
-                <div className="card-body">
-                  <span className="badge bg-danger mb-2">{jam.category}</span>
-                  <h6 className="fw-bold">{jam.title}</h6>
-                  <p className="small text-muted mb-1">Theme: {jam.theme}</p>
-                  <p className="small text-muted mb-3">{jam.date}</p>
-                  <p className="fw-semibold text-danger mb-1">
-                    🏆 Winner: {jam.winner}
-                  </p>
-                  <p className="small text-muted mb-2">{jam.team}</p>
-                  <p className="small">{jam.description}</p>
-                </div>
-              </div>
-            </div>
+          {filteredJams.map((jam, i) => (
+            <Jam event={jam} key={i} />
           ))}
         </div>
       </div>

@@ -138,10 +138,53 @@ const eventSchema={
     },
 }
 
+const jamSchema={
+    gameName:{ //Event Title
+        type:String,
+        required:[true, 'Event Title is required'],
+    },
+    jamSubmission:{ //talk, workshop, info session, mixer, game jam, asset jam, expo, field trip
+        type:String,
+        required:[true, 'Event type is required'],
+    },
+    image:{
+        type:String,
+    },
+    itchLink:{
+        type:String,
+    },
+    developers: {
+        type: [{
+            type:String,
+        }],
+    },
+    awards: {
+        type: [{
+            type:String,
+        }],
+    },
+}
+
+const Jam=mongoose.model('Jams',jamSchema);
+
 const Event=mongoose.model('Event',eventSchema);
 
 app.get('/test', function (req, res) {
     res.send('it works now')
+});
+
+app.get("/get-all-jams", function (req, res) {
+    Jam.find().then(jams => {
+        res.send({
+            "message": "success",
+            "data": jams,
+        })
+    }).catch(err => {
+        res.send({
+            "message": err.message,
+            "data": []
+        })
+    })
 });
 
 app.get("/get-all-events", function (req, res) {

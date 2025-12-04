@@ -5,7 +5,7 @@ import GenericHeader from "../components/GenericHeader";
 
 function GameExpo() {
   // We will need a way to update the eventDate
-  const eventDate = new Date(2025, 10, 22, 14, 0, 0); 
+  const eventDate = new Date(2026, 3, 18, 14, 0, 0);
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
 
   function getTimeLeft() {
