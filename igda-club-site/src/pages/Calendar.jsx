@@ -285,8 +285,6 @@ function CalendarPage() {
 
                                 {calendarDays.map((date, i) => {
                                     const dayEvents = date ? getEventForDate(date) : [];
-                                    console.log(date);
-                                    console.log(dayEvents);
                                     return (
                                         <div key={i} className="calendar-cell">
                                             {date && (

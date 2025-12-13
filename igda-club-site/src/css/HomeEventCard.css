@@ -1,0 +1,27 @@
+
+.event-card {
+    background-color: #ffffff;   
+    border: 1px solid #e5e7eb;        
+    border-radius: 1rem;                  
+    padding: 1.5rem;                     
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+    transition: all 0.2s ease-in-out;
+}
+
+.home-event-card h3,
+.event-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.home-event-card p,
+.event-card p {
+    margin: 0.25rem 0;
+}
+
+.home-event-card .location,
+.event-card .location {
+    font-size: 0.875rem;
+    color: #6b7280; 
+}

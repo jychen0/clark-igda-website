@@ -1,0 +1,46 @@
+.home-container {
+    max-width: 95%;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.no-events {
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+.carousel-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.carousel-btn {
+    background: #a11812;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.carousel-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    justify-content: center;
+}
+
+.upcoming-events,
+.announcements {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+}
