@@ -322,14 +322,6 @@ function CalendarPage() {
                 {/* Event Details Box */}
                 {selectedEvent && (
                     <LargeEventCard event={selectedEvent} />
-                    // <div className="event-details-container mt-4">
-                    //     <div className="event-details-box shadow-sm p-3 rounded-3">
-                    //         <h5>{selectedEvent.eventName}</h5>
-                    //         <p><strong>Type:</strong> {selectedEvent.eventType}</p>
-                    //         <p><strong>Starts:</strong> {new Date(selectedEvent.date.start).toLocaleString()}</p>
-                    //         <p><strong>Ends:</strong> {new Date(selectedEvent.date.end).toLocaleString()}</p>
-                    //     </div>
-                    // </div>
                 )}
             </div>
         </>

@@ -5,19 +5,27 @@ import GenericHeader from "../components/GenericHeader";
 
 function About() {
   const eboard = [
-    { name: "Maya Patten", role: "President", email: "mpatten@clarku.edu" },
-    { name: "Chase Burdin", role: "Vice President", email: "cburdin@clarku.edu" },
-    { name: "Maxwell DeRienze", role: "Treasurer", email: "mderienze@clarku.edu" },
-    { name: "Charlie Schmerzler", role: "Secretary", email: "cschmerzler@clarku.edu" },
-    { name: "Ren Grunberg", role: "Events Staff", email: "rgrunberg@clarku.edu" },
-    { name: "Diego Delmont", role: "Event Staff", email: "ddelmont@clarku.edu" },
+      { name: "Maya Patten", role: "President", email: "mpatten@clarku.edu" },
+      { name: "Chase Burdin", role: "Vice President", email: "cburdin@clarku.edu" },
+      { name: "Maxwell DeRienze", role: "Treasurer", email: "mderienze@clarku.edu" },
+      { name: "Charlie Schmerzler", role: "Secretary", email: "cschmerzler@clarku.edu" },
+      { name: "Ren Grunberg", role: "Event Planner", email: "rgrunberg@clarku.edu" },
+      { name: "Diego Delmont", role: "Event Planner", email: "ddelmont@clarku.edu" },
+      { name: "Jeremy Baranda", role: "Event Planner", email: "jbaranda@clarku.edu" },
+      { name: "Zamayne Abney", role: "Event Planner", email: "zabney@clarku.edu" },
+      { name: "Yaksh Goyani", role: "Event Planner", email: "ygoyani@clarku.edu" },
+      { name: "Zareh Malkhassian", role: "Event Planner", email: "zmalkhassian@clarku.edu" },
+      { name: "Darrow Mohammadi-Hall", role: "Event Planner", email: "dmohammadihall@clarku.edu" },
+      { name: "Jasper Vergo", role: "Event Planner", email: "jvergo@clarku.edu" },
+      { name: "Max Miller", role: "Event Staff", email: "mmiller2@clarku.edu" },
+      { name: "Robert Matzkin", role: "Event Staff", email: "rmatzkin@clarku.edu" },
   ];
 
     function getRandomInteger() {
         return Math.floor(Math.random() * (1));
     }
 
-    const IMG = (Math.random() * 10) < 5 ? "IMG_3477.jpg" : "IMG_3473.jpg";
+    // const IMG = (Math.random() * 10) < 5 ? "IMG_3477.jpg" : "IMG_3473.jpg";
 
   return (
     <>
@@ -59,7 +67,7 @@ function About() {
                     University by providing opportunities for learning,
                     collaboration, and creativity. We aim to support our members
                     in developing their skills, building meaningful connections,
-                    and pursuing their passion for game development."
+                    and pursuing their passion for game development in a professional setting."
                   </em>
                 </blockquote>
               </div>
@@ -118,12 +126,12 @@ function About() {
               </div>
             </div>
           ))}
-            <img
-                src={`${process.env.PUBLIC_URL}/assets/${IMG}`}
-                alt={"Charlie in captivity"}
-                className="img-fluid object-fit-cover"
-                style={{ width: 600, maxHeight: 800, margin: "auto"}}
-            />
+            {/*<img*/}
+            {/*    src={`${process.env.PUBLIC_URL}/assets/${IMG}`}*/}
+            {/*    alt={"Charlie in captivity"}*/}
+            {/*    className="img-fluid object-fit-cover"*/}
+            {/*    style={{ width: 600, maxHeight: 800, margin: "auto"}}*/}
+            {/*/>*/}
         </div>
 
         {/* --- How to Join --- */}
@@ -131,7 +139,7 @@ function About() {
           <div className="card-body">
             <h5 className="card-title text-danger">How to Join</h5>
             <p>
-              Joining Clark University IGDA is easy and free! We welcome students
+              Joining Clark University IGDA is easy! We welcome students
               of all skill levels and majors. Whether you’re a computer science
               student, an art major, or just curious about game development,
               there’s a place for you here.
@@ -140,11 +148,18 @@ function About() {
             <div className="join-section mt-4">
               <h6 className="fw-bold">General Membership</h6>
               <p className="mb-2">
-                Simply show up to any of our events and join the Discord!
+                  Our events are all open to the public, simply stop by CMACD or drop in our Discord's Event Stage!
               </p>
               <div className="d-flex gap-3">
-                <button className="btn btn-danger">View Calendar</button>
-                <button className="btn btn-outline-danger">Join Our Discord</button>
+                  <Link to="/calendar" className="btn btn-danger">
+                      View Calendar
+                  </Link>
+                <button className="btn btn-outline-danger">
+                    <a href={'https://discord.gg/QDZrPtB94V'}
+                       target="_blank" rel="noopener noreferrer">
+                        Join Our Discord
+                    </a>
+                </button>
               </div>
             </div>
 
