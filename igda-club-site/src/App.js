@@ -8,11 +8,14 @@ import GameJam from "./pages/GameJam";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-import GameJamRegister from "./pages/GameJamRegister";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 import JamRegister from "./pages/JamRegister";
 import EBoardApplication from "./pages/EBoardApplication"
 import GameExpoForm from "./pages/GameExpoForm";
 import PortfolioReviewForm from "./pages/PortfolioReviewForm";
+
+<script src="https://kit.fontawesome.com/6e0977d2a0.js" crossorigin="anonymous"></script>
 
 function App() {
     return (
@@ -23,6 +26,10 @@ function App() {
                 <div className="flex-grow-1">
                     <Routes>
                         <Route path="/" element={<Home />} />
+
+                        <Route path="/admin" element={<AdminLogin />} />
+                        <Route path="/admindashboard" element={<AdminDashboard />} />
+
                         <Route path="/calendar" element={<Calendar />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/events/talks" element={<Events />} />
