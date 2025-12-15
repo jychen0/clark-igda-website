@@ -5,11 +5,11 @@ import "../css/EventCard.css";
 function LargeEventCard({ event }) {
   const location = event.location.held ? "In Person" : "Virtual";
   let link;
-    if (event.location.held) {
-        link = 'https://www.google.com/maps/place/Clark+University+Center+for+Media+Arts,+Computing,+and+Design/@42.2520511,-71.8234891,17z/data=!3m1!4b1!4m6!3m5!1s0x89e407453d81d4db:0xe52ccf58849345d1!8m2!3d42.2520472!4d-71.8209142!16s%2Fg%2F11vf1slnz3'
-    } else {
-        link = 'https://discord.gg/QDZrPtB94V';
-    }
+  if (event.location.held) {
+    link = 'https://www.google.com/maps/place/Clark+University+Center+for+Media+Arts,+Computing,+and+Design/@42.2520511,-71.8234891,17z/data=!3m1!4b1!4m6!3m5!1s0x89e407453d81d4db:0xe52ccf58849345d1!8m2!3d42.2520472!4d-71.8209142!16s%2Fg%2F11vf1slnz3'
+  } else {
+    link = 'https://discord.gg/QDZrPtB94V';
+  }
   const startTime = new Date(event.date.start);
   const endTime = new Date(event.date.end);
 
@@ -45,10 +45,10 @@ function LargeEventCard({ event }) {
               <h5 className="card-title fw-bold">{event.eventName}</h5>
               <p className="card-text text-muted mb-2">{event.overview}</p>
               <p className="card-text small mb-1">
-                  <strong>Location:</strong> {location} —
-                  <a href={link} style={{ color: "black" }} target="_blank" rel="noopener noreferrer">
-                      {event.location.location}
-                  </a>
+                <strong>Location:</strong> {location} —
+                <a href={link} style={{ color: "black" }} target="_blank" rel="noopener noreferrer">
+                  {event.location.location}
+                </a>
               </p>
               <p className="card-text small mb-1">
                 <strong>Date:</strong>{" "}
@@ -61,7 +61,10 @@ function LargeEventCard({ event }) {
               </p>
             </div>
             <div className="mt-3">
-              <Link to="/home" className="btn btn-outline-danger btn-sm">
+              <Link
+                to={`/events/${event._id}`}
+                className="btn btn-outline-danger btn-sm"
+              >
                 View Event Info
               </Link>
             </div>

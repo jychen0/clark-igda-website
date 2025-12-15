@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../css/HomeEventCard.css";
 
-function HomeEventCard({ title, start, end, location, desc }) {
+function HomeEventCard({ id, title, start, end, location, desc }) {
     const dateObj = new Date(start);
 
     const formattedDate = dateObj.toLocaleDateString("en-US", {
@@ -26,9 +26,12 @@ function HomeEventCard({ title, start, end, location, desc }) {
             {desc && <p className="mt-2">{desc}</p>}
 
             <div className="mt-3">
-              <Link to="/home" className="btn btn-outline-danger btn-sm">
-                View Event Info
-              </Link>
+                <Link
+                    to={`/events/${id}`}
+                    className="btn btn-outline-danger btn-sm"
+                >
+                    View Event Info
+                </Link>
             </div>
         </div>
     );

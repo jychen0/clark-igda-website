@@ -73,6 +73,7 @@ function Home() {
                         <div className="event-grid">
                             {upcomingEvents.map((event, i) => (
                                 <HomeEventCard
+                                    id={event._id}
                                     title={event.eventName || event.title} 
                                     start={event.date?.start}
                                     end={event.date?.end}

@@ -388,6 +388,22 @@ app.get('/get-events-by-id', function (req, res) {
         })
 });
 
+app.get("/events/:id", async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    res.json(event);
+  } catch (err) {
+    console.error("Error fetching event:", err);
+    res.status(500).json({ message: "Error fetching event" });
+  }
+});
+
+
 app.get("/get-events-by-filters", function (req, res) {
     let searchKey = req.query.search_key;
     let min_year = req.query.min_year;

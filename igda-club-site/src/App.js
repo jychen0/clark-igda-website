@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Calendar from './pages/Calendar';
 import About from './pages/About';
 import Events from "./pages/Events";
+import EventDetails from "./pages/EventDetails";
 import GameExpo from "./pages/GameExpo";
 import GameJam from "./pages/GameJam";
 import Navbar from './components/Navbar';
@@ -12,6 +13,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AddContentPage from "./pages/AddContentPage";
 import ModifyContentPage from "./pages/ModifyContentPage";
+
 import JamRegister from "./pages/JamRegister";
 import EBoardApplication from "./pages/EBoardApplication"
 import GameExpoForm from "./pages/GameExpoForm";
@@ -39,6 +41,7 @@ function App() {
                         <Route path="/events/talks" element={<Events />} />
                         <Route path="/events/expo" element={<GameExpo />} />
                         <Route path="/events/game-jams" element={<GameJam />} />
+                        <Route path="/events/:id" element={<EventDetails />} />
 
                         <Route path="/events/game-jams/register" element={<JamRegister />} />
                         <Route path="/eboard/application" element={<EBoardApplication />} />
