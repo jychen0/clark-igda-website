@@ -1,39 +1,153 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/AdminPages.css";
+import EBoardMember from "../components/EBoardMember";
 
 function AdminDashboard() {
     const navigate = useNavigate();
+    const [eboard, setEboard] = useState([
+        { id: 1, name: "Jane Smith", position: "Vice President" },
+        { id: 2, name: "Alex Johnson", position: "Treasurer" },
+    ]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/admin/check", {
-            credentials: "include"
-        })
-        .then(res => {
-            if (!res.ok) navigate("/admin");
-        });
+        fetch("http://localhost:3001/admin/check", { credentials: "include" })
+            .then((res) => {
+                if (!res.ok) {
+                    navigate("/admin");
+                }
+            })
+            .catch(() => navigate("/admin"));
     }, [navigate]);
 
-    const logout = async () => {
-        await fetch("http://localhost:3001/admin/logout", {
-            credentials: "include"
-        });
-        navigate("/");
+    useEffect(() => {
+        fetch("http://localhost:3001/get-all-eboard")
+            .then((res) => res.json())
+            .then((data) => setEboard(data.data || []))
+            .catch(() => setEboard([]));
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            const res = await fetch("http://localhost:3001/admin/logout", {
+                method: "GET",
+                credentials: "include",
+            });
+
+            if (res.ok) {
+                navigate("/");
+            } else {
+                console.error("Logout failed");
+            }
+        } catch (err) {
+            console.error("Error logging out:", err);
+        }
     };
 
+    const handleAddMember = async () => {
+        const newMember = {
+            name: "IGDA E-Board Member",
+            position: "E-Board Member",
+            image: "",
+        };
+        await fetch("http://localhost:3001/admin/add-eboard", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newMember),
+        });
+        const res = await fetch("http://localhost:3001/get-all-eboard");
+        const data = await res.json();
+        setEboard(data.data);
+    };
+
+    const handleSaveMember = async (updatedMember) => {
+        await fetch(`http://localhost:3001/admin/edit-eboard/${updatedMember._id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedMember),
+        });
+        const res = await fetch("http://localhost:3001/get-all-eboard");
+        const data = await res.json();
+        setEboard(data.data);
+    };
+
+    const handleRemoveMember = async (id) => {
+        await fetch(`http://localhost:3001/admin/delete-eboard/${id}`, {
+            method: "DELETE",
+        });
+        const res = await fetch("http://localhost:3001/get-all-eboard");
+        const data = await res.json();
+        setEboard(data.data);
+    };
+
+
     return (
-        <div className="admin-container">
-            <h1>Admin Dashboard</h1>
-            <button onClick={logout}>Logout</button>
+        <div className="admin-dashboard">
+            <header className="admin-header">
+                <div>
+                    <h1>Admin Dashboard</h1>
+                    <p>Clark University IGDA Management</p>
+                </div>
+                <button className="logout-btn" onClick={handleLogout}>Logout</button>
+            </header>
 
-            <hr />
+            {/* ---- CONTENT MANAGEMENT ---- */}
+            <section className="section content-management">
+                <h2>Content Management</h2>
 
-            <h2>Events</h2>
-            <button>Add Event</button>
+                <div className="card-grid">
+                    <ActionCard
+                        title="Add Event / Announcement"
+                        desc="Create a new event or announcement for the site."
+                        color="red"
+                        onClick={() => navigate("/admin/add-content")}
+                    />
+                    <ActionCard
+                        title="Modify Current Events / Announcements"
+                        desc="View, edit, or delete existing entries."
+                        color="orange"
+                        onClick={() => navigate("/admin/modify-content")}
+                    />
+                </div>
+            </section>
 
-            <h2>Announcements</h2>
-            <button>Add Announcement</button>
+            {/* -------- E-BOARD MANAGEMENT -------- */}
+            <section className="section eboard-management">
+                <div className="eboard-header">
+                    <h2>👥 E-Board Management</h2>
+                    <button className="add-btn" onClick={handleAddMember}>+ Add Member</button>
+                </div>
+
+                <div className="eboard-grid">
+                    {eboard.map((member) => (
+                        <EBoardMember
+                            key={member._id}
+                            member={member}
+                            onSave={handleSaveMember}
+                            onRemove={handleRemoveMember}
+                        />
+                    ))}
+                </div>
+            </section>
         </div>
     );
 }
+
+function ActionCard({ title, desc, color, onClick }) {
+  return (
+    <div className="action-card" onClick={onClick} style={{ cursor: "pointer" }}>
+      <h3>{title}</h3>
+      <p>{desc}</p>
+      <button
+        type="button"
+        className={`action-btn ${color}`}
+        onClick={onClick}
+      >
+        {title}
+      </button>
+    </div>
+  );
+}
+
 
 export default AdminDashboard;

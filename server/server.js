@@ -183,9 +183,43 @@ const jamSchema = {
     },
 }
 
-const Jam = mongoose.model('Jams', jamSchema);
+const announcementSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, "Title is required"],
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  tag: {
+    type: String,
+  },
+  desc: {
+    type: String,
+    required: [true, "Description is required"],
+  },
+});
 
+const eboardSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "Name is required"],
+  },
+  position: {
+    type: String,
+    required: [true, "Position is required"],
+  },
+  image: {
+    type: String,
+    default: "",
+  },
+});
+
+const Jam = mongoose.model('Jams', jamSchema);
 const Event = mongoose.model('Event', eventSchema);
+const Announcement = mongoose.model("Announcement", announcementSchema);
+const EBoardMember = mongoose.model("EBoardMember", eboardSchema);
 
 const adminSchema = new mongoose.Schema({
     username: String,
@@ -366,4 +400,108 @@ app.get("/get-events-by-filters", function (req, res) {
                 "data": []
             })
         })
+});
+
+// --- Admin Management --- //
+app.post("/admin/add-event", async (req, res) => {
+  try {
+    const event = new Event(req.body);
+    await event.save();
+    res.json({ message: "Event added successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.put("/admin/edit-event/:id", async (req, res) => {
+  try {
+    await Event.findByIdAndUpdate(req.params.id, req.body);
+    res.json({ message: "Event updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.delete("/admin/delete-event/:id", async (req, res) => {
+  try {
+    await Event.findByIdAndDelete(req.params.id);
+    res.json({ message: "Event deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get("/get-all-announcements", async (req, res) => {
+  try {
+    const announcements = await Announcement.find().sort({ date: -1 });
+    res.json({ message: "success", data: announcements });
+  } catch (err) {
+    res.status(500).json({ message: err.message, data: [] });
+  }
+});
+
+app.post("/admin/add-announcement", async (req, res) => {
+  try {
+    const newAnnouncement = new Announcement(req.body);
+    await newAnnouncement.save();
+    res.json({ message: "Announcement added successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.put("/admin/edit-announcement/:id", async (req, res) => {
+  try {
+    await Announcement.findByIdAndUpdate(req.params.id, req.body);
+    res.json({ message: "Announcement updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.delete("/admin/delete-announcement/:id", async (req, res) => {
+  try {
+    await Announcement.findByIdAndDelete(req.params.id);
+    res.json({ message: "Announcement removed successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// --- E-Board Management --- //
+app.get("/get-all-eboard", async (req, res) => {
+  try {
+    const members = await EBoardMember.find();
+    res.json({ message: "success", data: members });
+  } catch (err) {
+    res.status(500).json({ message: err.message, data: [] });
+  }
+});
+
+app.post("/admin/add-eboard", async (req, res) => {
+  try {
+    const newMember = new EBoardMember(req.body);
+    await newMember.save();
+    res.json({ message: "E-Board member added successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.put("/admin/edit-eboard/:id", async (req, res) => {
+  try {
+    await EBoardMember.findByIdAndUpdate(req.params.id, req.body);
+    res.json({ message: "E-Board member updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.delete("/admin/delete-eboard/:id", async (req, res) => {
+  try {
+    await EBoardMember.findByIdAndDelete(req.params.id);
+    res.json({ message: "E-Board member removed successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });

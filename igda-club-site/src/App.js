@@ -10,6 +10,8 @@ import Footer from './components/Footer';
 
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import AddContentPage from "./pages/AddContentPage";
+import ModifyContentPage from "./pages/ModifyContentPage";
 import JamRegister from "./pages/JamRegister";
 import EBoardApplication from "./pages/EBoardApplication"
 import GameExpoForm from "./pages/GameExpoForm";
@@ -29,6 +31,8 @@ function App() {
 
                         <Route path="/admin" element={<AdminLogin />} />
                         <Route path="/admindashboard" element={<AdminDashboard />} />
+                        <Route path="/admin/add-content" element={<AddContentPage />} />
+                        <Route path="/admin/modify-content" element={<ModifyContentPage />} />
 
                         <Route path="/calendar" element={<Calendar />} />
                         <Route path="/about" element={<About />} />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/AdminPages.css";
 
 function AdminLogin() {
     const [password, setPassword] = useState("");
@@ -28,55 +29,31 @@ function AdminLogin() {
     };
 
     return (
-        <div className="login-container" style={{ maxWidth: "400px", margin: "3rem auto" }}>
+        <div className="login-container">
             <h2>Admin Login</h2>
 
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
 
             <form onSubmit={login}>
-                <div style={{ position: "relative" }}>
+                <div className="password-wrapper">
                     <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Admin Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{
-                            width: "100%",
-                            padding: "10px 40px 10px 10px",
-                            fontSize: "1rem",
-                        }}
+                        className="password-input"
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        style={{
-                            position: "absolute",
-                            right: "10px",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                            fontSize: "1.2rem",
-                        }}
+                        className="toggle-password-btn"
                     >
                         {showPassword ? "🙈" : "👁️"}
                     </button>
                 </div>
 
-                <button
-                    type="submit"
-                    style={{
-                        marginTop: "1rem",
-                        width: "100%",
-                        padding: "10px",
-                        backgroundColor: "#007bff",
-                        color: "white",
-                        border: "none",
-                        cursor: "pointer",
-                    }}
-                >
+                <button type="submit" className="login-btn">
                     Login
                 </button>
             </form>
