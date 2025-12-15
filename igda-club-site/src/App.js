@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as HashRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Calendar from './pages/Calendar';
 import About from './pages/About';
@@ -21,7 +21,7 @@ import PortfolioReviewForm from "./pages/PortfolioReviewForm";
 
 function App() {
     return (
-        <Router basename={process.env.PUBLIC_URL+'/'}>
+        <HashRouter basename={process.env.PUBLIC_URL+'/'}>
             <div className="d-flex flex-column min-vh-100">
                 <Navbar />
 
@@ -49,7 +49,7 @@ function App() {
 
                 <Footer />
             </div>
-        </Router>
+        </HashRouter>
     );
 }
 
