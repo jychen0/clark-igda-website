@@ -16,7 +16,6 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + "/public")); //might be redundant
 app.use(express.static(__dirname + "/client")); //this should allow us to load any files within this subdirectory
 
 app.use(session({
@@ -66,8 +65,11 @@ app.listen(port, function () {
     console.log(`Server listening on port ${port}`);
 });
 
+// app.get('/', function (req, res) {
+//     res.sendFile(__dirname + "/public/index.html");
+// });
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + "/public/index.html");
+    res.sendFile(__dirname + "/igda-club-site/public/index.html");
 });
 
 //subdocument schema for event speakers {name, info, credentials}
