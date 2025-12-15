@@ -402,14 +402,50 @@ app.get("/get-events-by-filters", function (req, res) {
         })
 });
 
+app.get("/get-all-announcements", async (req, res) => {
+  try {
+    const announcements = await Announcement.find().sort({ date: -1 });
+    res.json({ message: "success", data: announcements });
+  } catch (err) {
+    console.error("Error fetching announcements:", err);
+    res.status(500).json({ message: "Error fetching announcements", data: [] });
+  }
+});
+
 // --- Admin Management --- //
 app.post("/admin/add-event", async (req, res) => {
   try {
-    const event = new Event(req.body);
-    await event.save();
+    const body = { ...req.body };
+
+    if (!body.attendance && body.attendance !== 0) body.attendance = 0;
+    if (body.capacity === "" || body.capacity === null) delete body.capacity;
+
+    const newEvent = new Event(body);
+    await newEvent.save();
+
     res.json({ message: "Event added successfully" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Error adding event:", err);
+
+    if (err.name === "ValidationError") {
+      const messages = Object.values(err.errors)
+        .map((e) => e.message)
+        .join("; ");
+      return res.status(400).json({ message: messages });
+    }
+    res.status(500).json({ message: "Unexpected server error" });
+  }
+});
+
+
+app.post("/admin/add-announcement", async (req, res) => {
+  try {
+    const newAnnouncement = new Announcement(req.body);
+    await newAnnouncement.save();
+    res.json({ message: "Announcement added successfully" });
+  } catch (err) {
+    console.error("Error adding announcement:", err);
+    res.status(500).json({ message: "Error adding announcement", error: err.message });
   }
 });
 
@@ -418,35 +454,8 @@ app.put("/admin/edit-event/:id", async (req, res) => {
     await Event.findByIdAndUpdate(req.params.id, req.body);
     res.json({ message: "Event updated successfully" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.delete("/admin/delete-event/:id", async (req, res) => {
-  try {
-    await Event.findByIdAndDelete(req.params.id);
-    res.json({ message: "Event deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.get("/get-all-announcements", async (req, res) => {
-  try {
-    const announcements = await Announcement.find().sort({ date: -1 });
-    res.json({ message: "success", data: announcements });
-  } catch (err) {
-    res.status(500).json({ message: err.message, data: [] });
-  }
-});
-
-app.post("/admin/add-announcement", async (req, res) => {
-  try {
-    const newAnnouncement = new Announcement(req.body);
-    await newAnnouncement.save();
-    res.json({ message: "Announcement added successfully" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Error updating event:", err);
+    res.status(500).json({ message: "Error updating event" });
   }
 });
 
@@ -455,16 +464,28 @@ app.put("/admin/edit-announcement/:id", async (req, res) => {
     await Announcement.findByIdAndUpdate(req.params.id, req.body);
     res.json({ message: "Announcement updated successfully" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Error updating announcement:", err);
+    res.status(500).json({ message: "Error updating announcement" });
+  }
+});
+
+app.delete("/admin/delete-event/:id", async (req, res) => {
+  try {
+    await Event.findByIdAndDelete(req.params.id);
+    res.json({ message: "Event deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting event:", err);
+    res.status(500).json({ message: "Error deleting event" });
   }
 });
 
 app.delete("/admin/delete-announcement/:id", async (req, res) => {
   try {
     await Announcement.findByIdAndDelete(req.params.id);
-    res.json({ message: "Announcement removed successfully" });
+    res.json({ message: "Announcement deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Error deleting announcement:", err);
+    res.status(500).json({ message: "Error deleting announcement" });
   }
 });
 

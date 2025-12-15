@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AddContentForm from "../components/AddContentForm";
 import "../css/AdminPages.css";
@@ -8,6 +9,20 @@ export default function AddContentPage() {
 
   const isEdit = !!location.state?.item;
   const type = location.state?.type || "event";
+
+  useEffect(() => {
+  async function checkAuth() {
+    try {
+      const res = await fetch("http://localhost:3001/admin/check", {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Not authenticated");
+    } catch (err) {
+      navigate("/admin"); 
+    }
+  }
+  checkAuth();
+}, [navigate]);
 
   return (
     <div className="admin-dashboard">

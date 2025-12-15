@@ -28,11 +28,16 @@ export default function AddContentForm({ editData, editType }) {
   );
 
   // Announcement form data
-  const [announcementData, setAnnouncementData] = useState(
-    editType === "announcement" && editData
-      ? editData
-      : { title: "", tag: "", desc: "" }
-  );
+const [announcementData, setAnnouncementData] = useState(
+  editType === "announcement" && editData
+    ? editData
+    : {
+        title: "",
+        desc: "",
+        date: new Date().toISOString().split("T")[0], // default: today’s date
+      }
+);
+
 
   // Options for multi-select & dropdowns
   const eventTypes = ["Game Jam", "Asset Jam", "Workshop", "Industry Talk", "Mixer", "Info Session", "Field Trip", "Other"];
@@ -103,7 +108,7 @@ export default function AddContentForm({ editData, editType }) {
           value={type}
           onChange={(e) => setType(e.target.value)}
           className="form-select"
-          disabled={isEdit} // prevent switching type when editing
+          disabled={isEdit}
         >
           <option value="event">Event</option>
           <option value="announcement">Announcement</option>
@@ -351,12 +356,12 @@ function AnnouncementForm({ data, setData }) {
         required
       />
 
-      <label>Tag</label>
+      <label>Date</label>
       <input
-        type="text"
-        value={data.tag}
-        onChange={(e) => update("tag", e.target.value)}
-        placeholder="General, Game Jam, etc."
+        type="date"
+        value={data.date ? data.date.split("T")[0] : new Date().toISOString().split("T")[0]}
+        onChange={(e) => update("date", e.target.value)}
+        required
       />
 
       <label>Description</label>
@@ -369,3 +374,4 @@ function AnnouncementForm({ data, setData }) {
     </div>
   );
 }
+
