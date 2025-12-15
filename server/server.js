@@ -11,7 +11,7 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose").default;
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true
 }));
 app.use(express.json());
@@ -72,14 +72,17 @@ app.listen(port, function () {
 // app.get('/', function (req, res) {
 //     res.sendFile(__dirname + "/public/index.html");
 // });
-app.use(express.static("/igda-club-site/build")); // Serve static files from the build directory
-app.use(express.static("/build")); // Serve static files from the build directory
-app.get("/", (req, res) => { // For any other route, serve the index.html file
-    res.sendFile(path.resolve(__dirname, "/igda-club-site", "build", "index.html"));
-});
-app.get("*", (req, res) => { // For any other route, serve the index.html file
-    res.sendFile(path.resolve(__dirname, "/igda-club-site", "build", "index.html"));
-});
+app.use(express.static(path.join(__dirname, 'build')));
+app.use('/', express.static(path.join(__dirname, '/igda-club-site/build')));
+
+// app.use(express.static("/igda-club-site/build")); // Serve static files from the build directory
+// app.use(express.static("/build")); // Serve static files from the build directory
+// app.get("/", (req, res) => { // For any other route, serve the index.html file
+//     res.sendFile(path.resolve(__dirname, "/igda-club-site", "build", "index.html"));
+// });
+// app.get("*", (req, res) => { // For any other route, serve the index.html file
+//     res.sendFile(path.resolve(__dirname, "/igda-club-site", "build", "index.html"));
+// });
 // if (process.env.NODE_ENVIRONMENT === "production") {
 //     app.use(express.static("igda-club-site/build")); // Serve static files from the build directory
 //     app.get("/", (req, res) => { // For any other route, serve the index.html file
@@ -284,7 +287,6 @@ adminSchema.plugin(passportLocalMongoose);
 
 const Admin = mongoose.model("Admin", adminSchema);
 
-
 passport.use(Admin.createStrategy());
 passport.serializeUser(Admin.serializeUser());
 passport.deserializeUser(Admin.deserializeUser());
@@ -309,7 +311,6 @@ async function ensureAdmin() {
 }
 
 ensureAdmin();
-
 
 app.get('/test', function (req, res) {
     res.send('it works now')
@@ -396,7 +397,6 @@ app.get("/get-all-events", function (req, res) {
         })
     })
 });
-
 
 app.get('/get-events-by-id', function (req, res) {
     Event.find({ '_id': req.query.event._id }) //if issues use event_id
@@ -491,7 +491,6 @@ app.post("/admin/add-event", async (req, res) => {
   }
 });
 
-
 app.post("/admin/add-announcement", async (req, res) => {
   try {
     const newAnnouncement = new Announcement(req.body);
@@ -579,4 +578,8 @@ app.delete("/admin/delete-eboard/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'igda-club-site/build/index.html'));
 });
