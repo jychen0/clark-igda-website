@@ -13,7 +13,7 @@ export default function ModifyContentPage() {
     useEffect(() => {
         async function checkAuth() {
             try {
-                const res = await fetch("http://localhost:3001/admin/check", {
+                const res = await fetch(process.env.PUBLIC_URL+'/admin/check', {
                     credentials: "include",
                 });
                 if (!res.ok) throw new Error("Not authenticated");
@@ -28,8 +28,8 @@ export default function ModifyContentPage() {
         async function fetchData() {
             try {
                 const [eventsRes, announcementsRes] = await Promise.all([
-                    fetch("http://localhost:3001/get-all-events"),
-                    fetch("http://localhost:3001/get-all-announcements"),
+                    fetch(process.env.PUBLIC_URL+'/get-all-events'),
+                    fetch(process.env.PUBLIC_URL+'/get-all-announcements'),
                 ]);
 
                 const eventsData = await eventsRes.json();
@@ -96,8 +96,8 @@ export default function ModifyContentPage() {
 
         const url =
             item._type === "event"
-                ? `http://localhost:3001/admin/delete-event/${item._id}`
-                : `http://localhost:3001/admin/delete-announcement/${item._id}`;
+                ? `${process.env.PUBLIC_URL}/admin/delete-event${item._id}`
+                : `${process.env.PUBLIC_URL}/admin/delete-announcement${item._id}`;
 
         try {
             const res = await fetch(url, { method: "DELETE" });

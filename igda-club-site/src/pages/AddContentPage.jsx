@@ -13,7 +13,7 @@ export default function AddContentPage() {
   useEffect(() => {
   async function checkAuth() {
     try {
-      const res = await fetch("http://localhost:3001/admin/check", {
+      const res = await fetch(process.env.PUBLIC_URL+'/admin/check', {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Not authenticated");

@@ -11,7 +11,7 @@ function AdminDashboard() {
     ]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/admin/check", { credentials: "include" })
+        fetch(process.env.PUBLIC_URL+'/admin/check', { credentials: "include" })
             .then((res) => {
                 if (!res.ok) {
                     navigate("/admin");
@@ -21,7 +21,7 @@ function AdminDashboard() {
     }, [navigate]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/get-all-eboard")
+        fetch(process.env.PUBLIC_URL+'/get-all-eboard')
             .then((res) => res.json())
             .then((data) => setEboard(data.data || []))
             .catch(() => setEboard([]));
@@ -29,7 +29,7 @@ function AdminDashboard() {
 
     const handleLogout = async () => {
         try {
-            const res = await fetch("http://localhost:3001/admin/logout", {
+            const res = await fetch(process.env.PUBLIC_URL+'/admin/logout', {
                 method: "GET",
                 credentials: "include",
             });
@@ -50,32 +50,32 @@ function AdminDashboard() {
             position: "E-Board Member",
             image: "",
         };
-        await fetch("http://localhost:3001/admin/add-eboard", {
+        await fetch(process.env.PUBLIC_URL+'/admin/add-eboard', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newMember),
         });
-        const res = await fetch("http://localhost:3001/get-all-eboard");
+        const res = await fetch(process.env.PUBLIC_URL+'/get-all-eboard');
         const data = await res.json();
         setEboard(data.data);
     };
 
     const handleSaveMember = async (updatedMember) => {
-        await fetch(`http://localhost:3001/admin/edit-eboard/${updatedMember._id}`, {
+        await fetch(`${process.env.PUBLIC_URL}/admin/edit-eboard/${updatedMember._id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedMember),
         });
-        const res = await fetch("http://localhost:3001/get-all-eboard");
+        const res = await fetch(process.env.PUBLIC_URL+'/get-all-eboard');
         const data = await res.json();
         setEboard(data.data);
     };
 
     const handleRemoveMember = async (id) => {
-        await fetch(`http://localhost:3001/admin/delete-eboard/${id}`, {
+        await fetch(`${process.env.PUBLIC_URL}/admin/delete-eboard/${id}`, {
             method: "DELETE",
         });
-        const res = await fetch("http://localhost:3001/get-all-eboard");
+        const res = await fetch(process.env.PUBLIC_URL+'/get-all-eboard');
         const data = await res.json();
         setEboard(data.data);
     };
