@@ -28,6 +28,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const {MongoClient, ServerApiVersion} = require('mongodb');
+const path = require("path");
 const uri = "mongodb+srv://bagels0009:testingpassword1@messageapp.gziedbg.mongodb.net/?appName=MessageApp";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -69,9 +70,20 @@ app.listen(port, function () {
 // app.get('/', function (req, res) {
 //     res.sendFile(__dirname + "/public/index.html");
 // });
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + "/../igda-club-site/public/index.html");
-});
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("igda-club-site/build")); // Serve static files from the build directory
+    app.get("*", (req, res) => { // For any other route, serve the index.html file
+        res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
+    });
+}
+// app.use(express.static("igda-club-site/build")); // Serve static files from the build directory
+// app.get("*", (req, res) => { // For any other route, serve the index.html file
+//     res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
+// });
+// app.get('/', function (req, res) {
+//     res.sendFile(__dirname + "/../igda-club-site/public/index.html");
+// });
 
 //subdocument schema for event speakers {name, info, credentials}
 const speakerSchema = {
