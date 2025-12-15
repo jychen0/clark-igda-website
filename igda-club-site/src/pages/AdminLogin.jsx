@@ -11,7 +11,7 @@ function AdminLogin() {
     const login = async (e) => {
         e.preventDefault();
 
-        const res = await fetch("http://localhost:3001/admin/login", {
+        const res = await fetch(process.env.PUBLIC_URL+'/admin/login', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",

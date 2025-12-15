@@ -18,7 +18,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/client")); //this should allow us to load any files within this subdirectory
 app.use(express.static(__dirname + "/igda-club-site"));
-//app.use(express.static(__dirname + "/igda-club-site"));
 
 app.use(session({
     secret: process.env.PASSPORT_SECRET,
@@ -75,30 +74,6 @@ app.listen(port, function () {
 app.use(express.static(path.join(__dirname, 'build')));
 app.use('/', express.static(path.join(__dirname, '/igda-club-site/build')));
 
-// app.use(express.static("/igda-club-site/build")); // Serve static files from the build directory
-// app.use(express.static("/build")); // Serve static files from the build directory
-// app.get("/", (req, res) => { // For any other route, serve the index.html file
-//     res.sendFile(path.resolve(__dirname, "/igda-club-site", "build", "index.html"));
-// });
-// app.get("*", (req, res) => { // For any other route, serve the index.html file
-//     res.sendFile(path.resolve(__dirname, "/igda-club-site", "build", "index.html"));
-// });
-// if (process.env.NODE_ENVIRONMENT === "production") {
-//     app.use(express.static("igda-club-site/build")); // Serve static files from the build directory
-//     app.get("/", (req, res) => { // For any other route, serve the index.html file
-//         res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
-//     });
-//     app.get("*", (req, res) => { // For any other route, serve the index.html file
-//         res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
-//     });
-// }
-// app.use(express.static("igda-club-site/build")); // Serve static files from the build directory
-// app.get("*", (req, res) => { // For any other route, serve the index.html file
-//     res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
-// });
-// app.get('/', function (req, res) {
-//     res.sendFile(__dirname + "/../igda-club-site/public/index.html");
-// });
 
 //subdocument schema for event speakers {name, info, credentials}
 const speakerSchema = {
