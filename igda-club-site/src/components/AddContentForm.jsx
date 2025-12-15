@@ -13,30 +13,30 @@ export default function AddContentForm({ editData, editType }) {
     editType === "event" && editData
       ? editData
       : {
-          eventName: "",
-          eventType: "",
-          posterIMG: "",
-          overview: "",
-          date: { semester: "", start: "", end: "" },
-          location: { held: 1, location: "" },
-          involvedClubs: [],
-          targetTracks: [],
-          speakers: [],
-          capacity: "",
-          attendance: "",
-        }
+        eventName: "",
+        eventType: "",
+        posterIMG: "",
+        overview: "",
+        date: { semester: "", start: "", end: "" },
+        location: { held: 1, location: "" },
+        involvedClubs: [],
+        targetTracks: [],
+        speakers: [],
+        capacity: "",
+        attendance: "",
+      }
   );
 
   // Announcement form data
-const [announcementData, setAnnouncementData] = useState(
-  editType === "announcement" && editData
-    ? editData
-    : {
+  const [announcementData, setAnnouncementData] = useState(
+    editType === "announcement" && editData
+      ? editData
+      : {
         title: "",
         desc: "",
         date: new Date().toISOString().split("T")[0], // default: today’s date
       }
-);
+  );
 
 
   // Options for multi-select & dropdowns
@@ -76,8 +76,8 @@ const [announcementData, setAnnouncementData] = useState(
           ? `http://localhost:3001/admin/edit-event/${editData._id}`
           : "http://localhost:3001/admin/add-event"
         : isEdit
-        ? `http://localhost:3001/admin/edit-announcement/${editData._id}`
-        : "http://localhost:3001/admin/add-announcement";
+          ? `http://localhost:3001/admin/edit-announcement/${editData._id}`
+          : "http://localhost:3001/admin/add-announcement";
 
     const body = type === "event" ? eventData : announcementData;
 
@@ -248,9 +248,9 @@ function EventForm({
 
       {/* Target Tracks */}
       <label>Target Tracks</label>
-      <div className="multiselect">
+      <div className="multiselect-grid">
         {trackOptions.map((track) => (
-          <label key={track} style={{ display: "block" }}>
+          <label key={track} className="checkbox-item">
             <input
               type="checkbox"
               checked={data.targetTracks?.includes(track)}
@@ -262,7 +262,7 @@ function EventForm({
                 update("targetTracks", updated);
               }}
             />
-            {track}
+            <span>{track}</span>
           </label>
         ))}
       </div>
