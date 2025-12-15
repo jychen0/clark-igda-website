@@ -68,9 +68,9 @@ app.listen(port, function () {
 // app.get('/', function (req, res) {
 //     res.sendFile(__dirname + "/public/index.html");
 // });
-// app.get('/', function (req, res) {
-//     res.sendFile(__dirname + "/igda-club-site/public/index.html");
-// });
+app.get('/', function (req, res) {
+    res.sendFile(__dirname + "/igda-club-site/public/index.html");
+});
 
 //subdocument schema for event speakers {name, info, credentials}
 const speakerSchema = {
