@@ -72,16 +72,23 @@ app.listen(port, function () {
 // app.get('/', function (req, res) {
 //     res.sendFile(__dirname + "/public/index.html");
 // });
-
-if (process.env.NODE_ENVIRONMENT === "production") {
-    app.use(express.static("igda-club-site/build")); // Serve static files from the build directory
-    app.get("/", (req, res) => { // For any other route, serve the index.html file
-        res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
-    });
-    app.get("*", (req, res) => { // For any other route, serve the index.html file
-        res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
-    });
-}
+app.use(express.static("/igda-club-site/build")); // Serve static files from the build directory
+app.use(express.static("/build")); // Serve static files from the build directory
+app.get("/", (req, res) => { // For any other route, serve the index.html file
+    res.sendFile(path.resolve(__dirname, "/igda-club-site", "build", "index.html"));
+});
+app.get("*", (req, res) => { // For any other route, serve the index.html file
+    res.sendFile(path.resolve(__dirname, "/igda-club-site", "build", "index.html"));
+});
+// if (process.env.NODE_ENVIRONMENT === "production") {
+//     app.use(express.static("igda-club-site/build")); // Serve static files from the build directory
+//     app.get("/", (req, res) => { // For any other route, serve the index.html file
+//         res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
+//     });
+//     app.get("*", (req, res) => { // For any other route, serve the index.html file
+//         res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
+//     });
+// }
 // app.use(express.static("igda-club-site/build")); // Serve static files from the build directory
 // app.get("*", (req, res) => { // For any other route, serve the index.html file
 //     res.sendFile(path.resolve(__dirname, "igda-club-site", "build", "index.html"));
