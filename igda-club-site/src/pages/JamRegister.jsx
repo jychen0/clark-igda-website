@@ -203,7 +203,7 @@ function JamRegister() {
                 <>
                     <GenericHeader
                         title="Game Jam Sign Up"
-                        subtitle="Checking answers..."
+                        subtitle="Thank you for signing up!"
                         gradientColors={["#550100", "#A11812", "#550100"]}
                     />
 

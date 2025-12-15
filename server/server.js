@@ -28,7 +28,34 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect('mongodb://localhost:27017/eventDB', {})
+const {MongoClient, ServerApiVersion} = require('mongodb');
+const uri = "mongodb+srv://bagels0009:testingpassword1@messageapp.gziedbg.mongodb.net/?appName=MessageApp";
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
+});
+
+async function run() {
+    try {
+        // Connect the client to the server	(optional starting in v4.7)
+        await client.connect();
+        // Send a ping to confirm a successful connection
+        await client.db("admin").command({ping: 1});
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
+}
+
+run().catch(console.dir);
+
+mongoose.connect(uri, {})
     .then(function (db) {
         console.log("db connected");
     });
@@ -235,7 +262,7 @@ passport.use(Admin.createStrategy());
 passport.serializeUser(Admin.serializeUser());
 passport.deserializeUser(Admin.deserializeUser());
 
-// ✅ Ensure admin account exists on startup
+// Ensure admin account exists on startup
 async function ensureAdmin() {
   try {
     const existingAdmin = await Admin.findOne({ username: "admin" });
