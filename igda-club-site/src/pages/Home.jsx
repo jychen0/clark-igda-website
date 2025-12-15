@@ -6,26 +6,38 @@ import HomeAnnouncementCard from "../components/HomeAnnouncementCard";
 
 function Home() {
     const [events, setEvents] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [index, setIndex] = useState(0);
 
-    const announcements = [
-        { title: 'Welcome to Fall 2025', date: 'Nov 1, 2025', tag: 'General', desc: 'Welcome back everyone!...' },
-    ];
-
     useEffect(() => {
-        const fetchEvents = async () => {
+        const fetchData = async () => {
             try {
-                const res = await fetch("/get-all-events");
-                if (!res.ok) throw new Error("Failed fetching events");
-                const data = await res.json();
+                const [eventsRes, announcementsRes] = await Promise.all([
+                    fetch("/get-all-events"),
+                    fetch("/get-all-announcements"),
+                ]);
 
-                if (data.message === "success") {
-                    setEvents(data.data);
-                } else {
-                    setError(data.message);
+                if (!eventsRes.ok || !announcementsRes.ok) {
+                    throw new Error("Failed fetching data");
                 }
+
+                const eventsData = await eventsRes.json();
+                const announcementsData = await announcementsRes.json();
+
+                if (eventsData.message === "success") {
+                    setEvents(eventsData.data);
+                } else {
+                    setError(eventsData.message);
+                }
+
+                if (announcementsData.message === "success") {
+                    setAnnouncements(announcementsData.data);
+                } else {
+                    setError(announcementsData.message);
+                }
+
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -33,8 +45,9 @@ function Home() {
             }
         };
 
-        fetchEvents();
+        fetchData();
     }, []);
+
 
     const upcomingEvents = events
         .filter(event => {
@@ -74,7 +87,7 @@ function Home() {
                             {upcomingEvents.map((event, i) => (
                                 <HomeEventCard
                                     id={event._id}
-                                    title={event.eventName || event.title} 
+                                    title={event.eventName || event.title}
                                     start={event.date?.start}
                                     end={event.date?.end}
                                     location={event.location}
