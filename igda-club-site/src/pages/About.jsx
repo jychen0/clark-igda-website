@@ -1,32 +1,40 @@
-import React, {useEffect, useState} from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/About.css";
 import GenericHeader from "../components/GenericHeader";
 
 function About() {
-    const [eboard, setEboard] = useState([]);
-    const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const [eboard, setEboard] = useState([]);
+  const [error, setError] = useState(null);
+  const [applicationsOpen, setApplicationsOpen] = useState(true);
 
-    useEffect(() => {
-        const fetchEboard = async () => {
-            //asynchronous function
-            try {
-                const res = await fetch("/get-all-eboard")
-                if (!res.ok) {
-                    throw new Error("Failed fetching events, error:" + res.statusText);
-                }
-                const data = await res.json();
-                if (data.message === "success") {
-                    setEboard(data.data);
-                } else {
-                    setError(data.message);
-                }
-            } catch (err) {
-                setError(err.message);
-            }
+  useEffect(() => {
+    const fetchEboard = async () => {
+      //asynchronous function
+      try {
+        const res = await fetch("/get-all-eboard")
+        if (!res.ok) {
+          throw new Error("Failed fetching events, error:" + res.statusText);
         }
-        fetchEboard();
-    }, [])
+        const data = await res.json();
+        if (data.message === "success") {
+          setEboard(data.data);
+        } else {
+          setError(data.message);
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+    fetchEboard();
+  }, [])
+
+  useEffect(() => {
+    fetch("/applications/status")
+      .then(res => res.json())
+      .then(data => setApplicationsOpen(data.open));
+  }, []);
 
   //   const eboard = [
   //     { name: "Maya Patten", role: "President", email: "mpatten@clarku.edu" },
@@ -45,11 +53,11 @@ function About() {
   //     { name: "Robert Matzkin", role: "Event Staff", email: "rmatzkin@clarku.edu" },
   // ];
 
-    function getRandomInteger() {
-        return Math.floor(Math.random() * (1));
-    }
+  function getRandomInteger() {
+    return Math.floor(Math.random() * (1));
+  }
 
-    // const IMG = (Math.random() * 10) < 5 ? "IMG_3477.jpg" : "IMG_3473.jpg";
+  // const IMG = (Math.random() * 10) < 5 ? "IMG_3477.jpg" : "IMG_3473.jpg";
 
   return (
     <>
@@ -135,7 +143,7 @@ function About() {
         <h4 className="mb-3 text-center">E-Board Members</h4>
         <div className="row mb-5">
           {eboard.map((member, idx) => (
-            <div key={idx} className="col-md-4 mb-4">
+            <div key={idx} className="col-md-3 col-sm-6 mb-4">
               <div className="card border-0 shadow-sm eboard-card">
                 <div className="card-body text-center">
                   <h6 className="card-title fw-bold">{member.name}</h6>
@@ -150,12 +158,12 @@ function About() {
               </div>
             </div>
           ))}
-            {/*<img*/}
-            {/*    src={`${process.env.PUBLIC_URL}/assets/${IMG}`}*/}
-            {/*    alt={"Charlie in captivity"}*/}
-            {/*    className="img-fluid object-fit-cover"*/}
-            {/*    style={{ width: 600, maxHeight: 800, margin: "auto"}}*/}
-            {/*/>*/}
+          {/*<img*/}
+          {/*    src={`${process.env.PUBLIC_URL}/assets/${IMG}`}*/}
+          {/*    alt={"Charlie in captivity"}*/}
+          {/*    className="img-fluid object-fit-cover"*/}
+          {/*    style={{ width: 600, maxHeight: 800, margin: "auto"}}*/}
+          {/*/>*/}
         </div>
 
         {/* --- How to Join --- */}
@@ -172,17 +180,17 @@ function About() {
             <div className="join-section mt-4">
               <h6 className="fw-bold">General Membership</h6>
               <p className="mb-2">
-                  Our events are all open to the public, simply stop by CMACD or drop in our Discord's Event Stage!
+                Our events are all open to the public, simply stop by CMACD or drop in our Discord's Event Stage!
               </p>
               <div className="d-flex gap-3">
-                  <Link to="/calendar" className="btn btn-danger">
-                      View Calendar
-                  </Link>
+                <Link to="/calendar" className="btn btn-danger">
+                  View Calendar
+                </Link>
                 <button className="btn btn-outline-danger">
-                    <a href={'https://discord.gg/QDZrPtB94V'}
-                       target="_blank" rel="noopener noreferrer">
-                        Join Our Discord
-                    </a>
+                  <a href={'https://discord.gg/QDZrPtB94V'}
+                    target="_blank" rel="noopener noreferrer">
+                    Join Our Discord
+                  </a>
                 </button>
               </div>
             </div>
@@ -196,9 +204,13 @@ function About() {
                 beginning of each semester. E-Board members help plan events,
                 manage club operations, and shape the future of IGDA at Clark.
               </p>
-              <Link to="/eboard/application" className="btn btn-outline-secondary">
-                E-Board Application Form
-              </Link>
+              <button
+                className="btn btn-outline-secondary"
+                disabled={!applicationsOpen}
+                onClick={() => applicationsOpen && navigate("/eboard/application")}
+              >
+                {applicationsOpen ? "E-Board Application Form" : "Applications Closed"}
+              </button>
             </div>
           </div>
         </div>

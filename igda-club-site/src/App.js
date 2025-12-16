@@ -13,9 +13,10 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AddContentPage from "./pages/AddContentPage";
 import ModifyContentPage from "./pages/ModifyContentPage";
+import EBoardApplications from "./pages/EBoardApplications";
 
 import JamRegister from "./pages/JamRegister";
-import EBoardApplication from "./pages/EBoardApplication"
+import EBoardApplicationForm from "./pages/EBoardApplicationForm"
 import GameExpoForm from "./pages/GameExpoForm";
 import PortfolioReviewForm from "./pages/PortfolioReviewForm";
 
@@ -35,6 +36,7 @@ function App() {
                         <Route path="/admindashboard" element={<AdminDashboard />} />
                         <Route path="/admin/add-content" element={<AddContentPage />} />
                         <Route path="/admin/modify-content" element={<ModifyContentPage />} />
+                        <Route path="/admin/applications" element={<EBoardApplications />} />
 
                         <Route path="/calendar" element={<Calendar />} />
                         <Route path="/about" element={<About />} />
@@ -44,7 +46,7 @@ function App() {
                         <Route path="/events/:id" element={<EventDetails />} />
 
                         <Route path="/events/game-jams/register" element={<JamRegister />} />
-                        <Route path="/eboard/application" element={<EBoardApplication />} />
+                        <Route path="/eboard/application" element={<EBoardApplicationForm />} />
                         <Route path="/events/expo/application" element={<GameExpoForm />} />
                         <Route path="/events/expo/portfolio-review" element={<PortfolioReviewForm />} />
                     </Routes>

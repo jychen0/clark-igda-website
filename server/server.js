@@ -11,8 +11,8 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose").default;
 
 app.use(cors({
-    origin: "*",
-    credentials: true
+  origin: "*",
+  credentials: true
 }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,52 +20,52 @@ app.use(express.static(__dirname + "/client")); //this should allow us to load a
 app.use(express.static(__dirname + "/igda-club-site"));
 
 app.use(session({
-    secret: process.env.PASSPORT_SECRET,
-    resave: false,
-    saveUninitialized: false
+  secret: process.env.PASSPORT_SECRET,
+  resave: false,
+  saveUninitialized: false
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-const {MongoClient, ServerApiVersion} = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const path = require("path");
 const uri = "mongodb+srv://bagels0009:testingpassword1@messageapp.gziedbg.mongodb.net/?appName=MessageApp";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
 });
 
 async function run() {
-    try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("admin").command({ping: 1});
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-    }
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
 }
 
 run().catch(console.dir);
 
 mongoose.connect(uri, {})
-    .then(function (db) {
-        console.log("db connected");
-    });
+  .then(function (db) {
+    console.log("db connected");
+  });
 
 //frontend on port 3000
 //const port = 3001;
 const port = process.env.PORT || 3001;
 app.listen(port, function () {
-    console.log(`Server listening on port ${port}`);
+  console.log(`Server listening on port ${port}`);
 });
 
 // app.get('/', function (req, res) {
@@ -77,142 +77,142 @@ app.use('/', express.static(path.join(__dirname, '/igda-club-site/build')));
 
 //subdocument schema for event speakers {name, info, credentials}
 const speakerSchema = {
-    speakerName: { //Speaker full name
-        type: String,
-        required: [true, 'Speaker Name is required'],
-        minLength: [4, 'Speaker Name must be at least 4 characters'],
-    },
-    speakerInfo: { //Speaker LinkedIn URL
-        type: String,
-    },
-    speakerPos: { //Speaker Position
-        type: String,
-    },
-    speakerCred: { //Speaker Company / Affiliation
-        type: String,
-    }
+  speakerName: { //Speaker full name
+    type: String,
+    required: [true, 'Speaker Name is required'],
+    minLength: [4, 'Speaker Name must be at least 4 characters'],
+  },
+  speakerInfo: { //Speaker LinkedIn URL
+    type: String,
+  },
+  speakerPos: { //Speaker Position
+    type: String,
+  },
+  speakerCred: { //Speaker Company / Affiliation
+    type: String,
+  }
 }
 //subdocument schema for event date {semester, startTime, endTime}
 const dateSchema = {
-    semester: { //Semester event ran in
-        type: String,
-        required: [true, 'Semester is required'],
-    },
-    start: { //Start time of event
-        type: Date,
-        required: [true, 'Start Time is required'],
-        min: ['2023-01-01T00:00:00', 'Event must be since 2023'],
-    },
-    end: { //End time of event
-        type: Date,
-        required: [true, 'End Time is required'],
-        min: ['2023-01-01T00:00:00', 'Event must be since 2023'],
-    }
+  semester: { //Semester event ran in
+    type: String,
+    required: [true, 'Semester is required'],
+  },
+  start: { //Start time of event
+    type: Date,
+    required: [true, 'Start Time is required'],
+    min: ['2023-01-01T00:00:00', 'Event must be since 2023'],
+  },
+  end: { //End time of event
+    type: Date,
+    required: [true, 'End Time is required'],
+    min: ['2023-01-01T00:00:00', 'Event must be since 2023'],
+  }
 }
 //subdocument schema for event location, {held, location} 0=virtual, 1=in person
 const locationSchema = {
-    held: {
-        type: Number,
-        required: [true, 'in person clarification is required'],
-    },
-    location: {
-        type: String,
-        required: [true, 'Location is required'],
-    },
+  held: {
+    type: Number,
+    required: [true, 'in person clarification is required'],
+  },
+  location: {
+    type: String,
+    required: [true, 'Location is required'],
+  },
 }
 function minLength(val) {
-    //enforce minimum of 1 array object, used for speaker, involved clubs, and target tracks
-    return val.length > 0;
+  //enforce minimum of 1 array object, used for speaker, involved clubs, and target tracks
+  return val.length > 0;
 }
 function minTimeframe(date) {
-    //enforce event endTime being after startTime, currently broken
-    return date.start < date.end;
+  //enforce event endTime being after startTime, currently broken
+  return date.start < date.end;
 }
 const eventSchema = {
-    eventName: { //Event Title
-        type: String,
-        required: [true, 'Event Title is required'],
-        minLength: [5, 'Event Title must be at least 5 characters'],
+  eventName: { //Event Title
+    type: String,
+    required: [true, 'Event Title is required'],
+    minLength: [5, 'Event Title must be at least 5 characters'],
+  },
+  eventType: { //talk, workshop, info session, mixer, game jam, asset jam, expo, field trip
+    type: String,
+    required: [true, 'Event type is required'],
+  },
+  posterIMG: { //dir for images: /igda-club-site/src/assets/event_posters/ + posterIMG string
+    type: String,
+  },
+  speakers: { //array of outside industry speakers
+    type: [{
+      type: speakerSchema,
+    }],
+    //validate: [minLength, 'Must have at least one speaker']
+  },
+  targetTracks: { //lists all tracks the event caters towards (Production, Programming, 3D Art, 2D Art, Audio, Writing, Design)
+    type: [{
+      type: String,
+    }],
+  },
+  date: { //date object
+    type: dateSchema,
+    //validate: [minTimeframe, 'End time must be after start time']
+  },
+  location: { //location object
+    type: locationSchema
+  },
+  involvedClubs: { //IGDA is assumed, only lists additional clubs
+    type: [{
+      type: String,
+    }],
+    //validate: [minLength, 'Must have at least one involved Club']
+  },
+  overview: {
+    type: String,
+  },
+  capacity: { //if applicable, must be an int
+    type: Number,
+    validate: {
+      validator: function (value) {
+        return Number.isInteger(value);
+      },
+      message: "Capacity must be an integer"
     },
-    eventType: { //talk, workshop, info session, mixer, game jam, asset jam, expo, field trip
-        type: String,
-        required: [true, 'Event type is required'],
+  },
+  attendance: { //recorded # of attendees
+    type: Number,
+    validate: {
+      validator: function (value) {
+        return Number.isInteger(value);
+      },
+      message: "Attendance must be an integer"
     },
-    posterIMG: { //dir for images: /igda-club-site/src/assets/event_posters/ + posterIMG string
-        type: String,
-    },
-    speakers: { //array of outside industry speakers
-        type: [{
-            type: speakerSchema,
-        }],
-        //validate: [minLength, 'Must have at least one speaker']
-    },
-    targetTracks: { //lists all tracks the event caters towards (Production, Programming, 3D Art, 2D Art, Audio, Writing, Design)
-        type: [{
-            type: String,
-        }],
-    },
-    date: { //date object
-        type: dateSchema,
-        //validate: [minTimeframe, 'End time must be after start time']
-    },
-    location: { //location object
-        type: locationSchema
-    },
-    involvedClubs: { //IGDA is assumed, only lists additional clubs
-        type: [{
-            type: String,
-        }],
-        //validate: [minLength, 'Must have at least one involved Club']
-    },
-    overview: {
-        type: String,
-    },
-    capacity: { //if applicable, must be an int
-        type: Number,
-        validate: {
-            validator: function (value) {
-                return Number.isInteger(value);
-            },
-            message: "Capacity must be an integer"
-        },
-    },
-    attendance: { //recorded # of attendees
-        type: Number,
-        validate: {
-            validator: function (value) {
-                return Number.isInteger(value);
-            },
-            message: "Attendance must be an integer"
-        },
-    },
+  },
 }
 
 const jamSchema = {
-    gameName: { //Event Title
-        type: String,
-        required: [true, 'Event Title is required'],
-    },
-    jamSubmission: { //talk, workshop, info session, mixer, game jam, asset jam, expo, field trip
-        type: String,
-        required: [true, 'Event type is required'],
-    },
-    image: {
-        type: String,
-    },
-    itchLink: {
-        type: String,
-    },
-    developers: {
-        type: [{
-            type: String,
-        }],
-    },
-    awards: {
-        type: [{
-            type: String,
-        }],
-    },
+  gameName: { //Event Title
+    type: String,
+    required: [true, 'Event Title is required'],
+  },
+  jamSubmission: { //talk, workshop, info session, mixer, game jam, asset jam, expo, field trip
+    type: String,
+    required: [true, 'Event type is required'],
+  },
+  image: {
+    type: String,
+  },
+  itchLink: {
+    type: String,
+  },
+  developers: {
+    type: [{
+      type: String,
+    }],
+  },
+  awards: {
+    type: [{
+      type: String,
+    }],
+  },
 }
 
 const announcementSchema = new mongoose.Schema({
@@ -248,14 +248,31 @@ const eboardSchema = new mongoose.Schema({
   },
 });
 
+const eboardApplicationSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  responses: { type: Object, required: true }, // full form responses
+  submittedAt: { type: Date, default: Date.now }
+});
+
+const settingsSchema = new mongoose.Schema({
+  applicationsOpen: {
+    type: Boolean,
+    default: true,
+  },
+});
+
 const Jam = mongoose.model('Jams', jamSchema);
 const Event = mongoose.model('Event', eventSchema);
 const Announcement = mongoose.model("Announcement", announcementSchema);
 const EBoardMember = mongoose.model("EBoardMember", eboardSchema);
+const EBoardApplication = mongoose.model("Application", eboardApplicationSchema);
+const Settings = mongoose.model("Settings", settingsSchema);
+
 
 const adminSchema = new mongoose.Schema({
-    username: String,
-    password: String
+  username: String,
+  password: String
 });
 
 adminSchema.plugin(passportLocalMongoose);
@@ -288,7 +305,7 @@ async function ensureAdmin() {
 ensureAdmin();
 
 app.get('/test', function (req, res) {
-    res.send('it works now')
+  res.send('it works now')
 });
 
 app.post("/admin/login", (req, res, next) => {
@@ -312,17 +329,17 @@ app.post("/admin/login", (req, res, next) => {
 });
 
 app.get("/admin/check", function (req, res) {
-    if (req.isAuthenticated()) {
-        res.json({ authenticated: true });
-    } else {
-        res.status(401).json({ authenticated: false });
-    }
+  if (req.isAuthenticated()) {
+    res.json({ authenticated: true });
+  } else {
+    res.status(401).json({ authenticated: false });
+  }
 });
 
 app.get("/admin/logout", function (req, res) {
-    req.logout(() => {
-        res.json({ message: "logged out" });
-    });
+  req.logout(() => {
+    res.json({ message: "logged out" });
+  });
 });
 
 // // TEMPORARY: Reset admin password manually
@@ -346,46 +363,46 @@ app.get("/admin/logout", function (req, res) {
 // });
 
 app.get("/get-all-jams", function (req, res) {
-    Jam.find().then(jams => {
-        res.send({
-            "message": "success",
-            "data": jams,
-        })
-    }).catch(err => {
-        res.send({
-            "message": err.message,
-            "data": []
-        })
+  Jam.find().then(jams => {
+    res.send({
+      "message": "success",
+      "data": jams,
     })
+  }).catch(err => {
+    res.send({
+      "message": err.message,
+      "data": []
+    })
+  })
 });
 
 app.get("/get-all-events", function (req, res) {
-    Event.find().then(events => {
-        res.send({
-            "message": "success",
-            "data": events,
-        })
-    }).catch(err => {
-        res.send({
-            "message": err.message,
-            "data": []
-        })
+  Event.find().then(events => {
+    res.send({
+      "message": "success",
+      "data": events,
     })
+  }).catch(err => {
+    res.send({
+      "message": err.message,
+      "data": []
+    })
+  })
 });
 
 app.get('/get-events-by-id', function (req, res) {
-    Event.find({ '_id': req.query.event._id }) //if issues use event_id
-        .then(cars => {
-            res.send({
-                "message": "success",
-                "data": events[0],
-            })
-        }).catch(err => {
-            res.send({
-                "message": err.message,
-                "data": {}
-            })
-        })
+  Event.find({ '_id': req.query.event._id }) //if issues use event_id
+    .then(cars => {
+      res.send({
+        "message": "success",
+        "data": events[0],
+      })
+    }).catch(err => {
+      res.send({
+        "message": err.message,
+        "data": {}
+      })
+    })
 });
 
 app.get("/events/:id", async (req, res) => {
@@ -404,46 +421,46 @@ app.get("/events/:id", async (req, res) => {
 });
 
 app.get("/get-events-by-filters", function (req, res) {
-    let searchKey = req.query.search_key;
-    let min_year = req.query.min_year;
-    let max_year = req.query.max_year;
-    let min_price = req.query.min_price;
-    let max_price = req.query.max_price;
-    let sortBy = req.query.sortBy
-    console.log(sortBy)
+  let searchKey = req.query.search_key;
+  let min_year = req.query.min_year;
+  let max_year = req.query.max_year;
+  let min_price = req.query.min_price;
+  let max_price = req.query.max_price;
+  let sortBy = req.query.sortBy
+  console.log(sortBy)
 
-    //do not sort unless a attribute header was clicked
-    if (sortBy === "basic-addon2" || "search_box" || "nullSort") { sortBy = {}; }
-    if (!min_year) { min_year = 1900; }
-    if (!max_year) { max_year = new Date().getFullYear(); }
-    if (!min_price) { min_price = 0; }
-    if (!max_price) { max_price = Number.MAX_VALUE; }
+  //do not sort unless a attribute header was clicked
+  if (sortBy === "basic-addon2" || "search_box" || "nullSort") { sortBy = {}; }
+  if (!min_year) { min_year = 1900; }
+  if (!max_year) { max_year = new Date().getFullYear(); }
+  if (!min_price) { min_price = 0; }
+  if (!max_price) { max_price = Number.MAX_VALUE; }
 
-    Event.find({
-        $and: [
-            { year: { $gte: min_year }, },
-            { year: { $lte: max_year }, },
-            { price: { $gte: min_price }, },
-            { price: { $lte: max_price }, },
-            {
-                $or: [
-                    { make: { $regex: searchKey } },
-                    { model: { $regex: searchKey } }
-                ]
-            }
+  Event.find({
+    $and: [
+      { year: { $gte: min_year }, },
+      { year: { $lte: max_year }, },
+      { price: { $gte: min_price }, },
+      { price: { $lte: max_price }, },
+      {
+        $or: [
+          { make: { $regex: searchKey } },
+          { model: { $regex: searchKey } }
         ]
-    }).sort(req.query.sortBy)
-        .then(events => {
-            res.send({
-                "message": "success",
-                "data": events,
-            })
-        }).catch(err => {
-            res.send({
-                "message": err.message,
-                "data": []
-            })
-        })
+      }
+    ]
+  }).sort(req.query.sortBy)
+    .then(events => {
+      res.send({
+        "message": "success",
+        "data": events,
+      })
+    }).catch(err => {
+      res.send({
+        "message": err.message,
+        "data": []
+      })
+    })
 });
 
 app.get("/get-all-announcements", async (req, res) => {
@@ -455,6 +472,32 @@ app.get("/get-all-announcements", async (req, res) => {
     res.status(500).json({ message: "Error fetching announcements", data: [] });
   }
 });
+
+app.get("/applications/status", async (req, res) => {
+  let settings = await Settings.findOne();
+
+  if (!settings) {
+    settings = await Settings.create({ applicationsOpen: true });
+  }
+
+  res.json({ open: settings.applicationsOpen });
+});
+
+app.put("/admin/applications/toggle", async (req, res) => {
+  if (!req.isAuthenticated()) return res.sendStatus(401);
+
+  let settings = await Settings.findOne();
+
+  if (!settings) {
+    settings = await Settings.create({ applicationsOpen: true });
+  }
+
+  settings.applicationsOpen = !settings.applicationsOpen;
+  await settings.save();
+
+  res.json({ open: settings.applicationsOpen });
+});
+
 
 // --- Admin Management --- //
 app.post("/admin/add-event", async (req, res) => {
@@ -570,6 +613,42 @@ app.delete("/admin/delete-eboard/:id", async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'igda-club-site/build/index.html'));
+app.get("/admin/applications", async (req, res) => {
+  if (!req.isAuthenticated()) return res.sendStatus(401);
+
+  const apps = await EBoardApplication.find().sort({ submittedAt: -1 });
+  res.json({ message: "success", data: apps });
 });
+
+app.post("/applications/submit", async (req, res) => {
+  try {
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = await Settings.create({ applicationsOpen: true });
+    }
+
+    if (!settings.applicationsOpen) {
+      return res.status(403).json({ message: "Applications are closed" });
+    }
+
+    const { name, email, responses } = req.body;
+
+    const application = new EBoardApplication({
+      name,
+      email,
+      responses,
+    });
+
+    await application.save();
+    res.json({ message: "Application submitted" });
+  } catch (err) {
+    console.error("Application submit error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'igda-club-site/build/index.html'));
+});
+

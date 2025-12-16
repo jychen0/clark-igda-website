@@ -533,3 +533,74 @@
   font-weight: 500;
   font-size: 0.95rem;
 }
+
+.eboard-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.application-row {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.application-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 16px 20px;
+  cursor: pointer;
+}
+
+.application-summary:hover {
+  background-color: #f8fafc;
+}
+
+.application-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.muted {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.application-summary span {
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.application-details {
+  padding: 16px 20px;
+  border-top: 1px solid #e2e8f0;
+  background-color: #f9fafb;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 16px;
+}
+
+.response {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.response strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.response p {
+  margin: 0;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
