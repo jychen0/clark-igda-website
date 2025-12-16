@@ -46,8 +46,7 @@ function EventList() {
         }
 
         if (filterLocation !== "All") {
-            const isInPerson = filterLocation === "In Person";
-            filtered = filtered.filter((event) => event.location?.held === 1);
+            filtered = filtered.filter((event) => event.location.held === parseInt(filterLocation));
         }
 
         setFilteredEvents(filtered);
@@ -66,26 +65,29 @@ function EventList() {
 
                 <div className="d-flex flex-wrap gap-2">
                     <select
-                        className="form-select w-auto mb-2"
+                        className="form-select w-10 mb-2"
                         value={filterType}
                         onChange={(e) => setFilterType(e.target.value)}
                     >
-                        <option value="All">All Types</option>
+                        <option value="All">All Events</option>
                         <option value="Expo">Expo</option>
                         <option value="Game Jam">Game Jam</option>
+                        <option value="Asset Jam">Game Jam</option>
                         <option value="Workshop">Workshop</option>
                         <option value="Industry Talk">Industry Talk</option>
                         <option value="Mixer">Mixer</option>
+                        <option value="Info Session">Info Session</option>
+                        <option value="Field Trip">Field Trip</option>
                     </select>
 
                     <select
-                        className="form-select w-auto mb-2"
+                        className="form-select w-10 mb-2"
                         value={filterLocation}
                         onChange={(e) => setFilterLocation(e.target.value)}
                     >
                         <option value="All">All Locations</option>
-                        <option value="In Person">In Person</option>
-                        <option value="Virtual">Virtual</option>
+                        <option value="1">In Person</option>
+                        <option value="0">Virtual</option>
                     </select>
                 </div>
             </div>

@@ -88,8 +88,8 @@ function Home() {
                                 <HomeEventCard
                                     id={event._id}
                                     title={event.eventName || event.title}
-                                    start={event.date?.start}
-                                    end={event.date?.end}
+                                    start={event.date.start}
+                                    end={event.date.end}
                                     location={event.location}
                                     desc={event.overview || event.desc}
                                 />
@@ -110,7 +110,15 @@ function Home() {
 
                             <div className="event-grid">
                                 {upcomingEvents.slice(index, index + 3).map((event, i) => (
-                                    <HomeEventCard key={i} {...event} />
+                                    <HomeEventCard
+                                        key = {i}
+                                        id={event._id}
+                                        title={event.eventName || event.title}
+                                        start={event.date.start}
+                                        end={event.date.end}
+                                        location={event.location}
+                                        desc={event.overview || event.desc}
+                                    />
                                 ))}
                             </div>
 
@@ -127,8 +135,15 @@ function Home() {
 
                 <section className="announcements">
                     <h2>Announcements</h2>
-                    {announcements.map((a, i) => (
-                        <HomeAnnouncementCard key={i} {...a} />
+                    {announcements.map((announcement, i) => (
+                        <HomeAnnouncementCard
+                            key={i}
+                            id={announcement._id}
+                            title={announcement.title}
+                            tag={announcement.tag}
+                            date={announcement.date}
+                            desc={announcement.desc}
+                        />
                     ))}
                 </section>
 

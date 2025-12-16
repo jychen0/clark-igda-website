@@ -1,13 +1,24 @@
 import React from "react";
 
-function AnnouncementCard({ title, date, description, tag }) {
+function AnnouncementCard({ id, title, tag, date, desc }) {
     const tagColors = {
-        Event: "bg-red-500",
-        Social: "bg-blue-500",
-        Important: "bg-yellow-500",
-        Resources: "bg-green-500",
-        General: "bg-gray-400",
+        Event: "bg-danger",
+        Social: "bg-primary",
+        Important: "bg-warning",
+        Resources: "bg-primary",
+        Internship: "bg-success",
+        General: "bg-secondary",
     };
+
+    const dateObj = new Date(date);
+
+    const formattedDate = dateObj.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+    });
+
 
     const tagColor = tagColors[tag] || "bg-gray-400";
 
@@ -16,15 +27,12 @@ function AnnouncementCard({ title, date, description, tag }) {
             <div className="flex justify-between items-center mb-1">
                 <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
                 {tag && (
-                    <span
-                        className={`text-xs text-white px-2 py-1 rounded-md ${tagColor}`}
-                    >
-            {tag}
-          </span>
-                )}
+                    <span className={`badge mb-2 text-xs text-white px-2 py-1 ${tagColor}`}>
+                        {tag}
+                    </span>)}
             </div>
-            <p className="text-sm text-gray-500 mb-2">{date}</p>
-            <p className="text-gray-700">{description}</p>
+            <p className="text-sm text-gray-500 mb-2">{formattedDate}</p>
+            <p className="text-gray-700">{desc}</p>
         </div>
     );
 }
