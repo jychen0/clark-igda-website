@@ -220,7 +220,10 @@ function JamRegister() {
                         <Container>
                             <Row>
                                 <Col  md={{ span: 8, offset: 2 }} className="custom-margin">
-                                    <StepFinal teamInfo={formData} memberInfo={memberData}  />
+                                    <StepFinal
+                                        teamInfo={formData}
+                                        memberInfo={memberData}
+                                    />
                                 </Col>
                             </Row>
                         </Container>

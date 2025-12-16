@@ -265,57 +265,6 @@ function GameJam() {
                   </Accordion>
               </div>
 
-              {/*<div className="filters d-flex justify-content-center gap-3 mb-4">*/}
-              {/*  <select*/}
-              {/*    className="form-select w-auto"*/}
-              {/*    value={yearFilter}*/}
-              {/*    onChange={(e) => setYearFilter(e.target.value)}*/}
-              {/*  >*/}
-              {/*    <option>All Years</option>*/}
-              {/*      /!*<option>2026</option>*!/*/}
-              {/*      <option>2025</option>*/}
-              {/*    <option>2024</option>*/}
-              {/*    <option>2023</option>*/}
-              {/*  </select>*/}
-
-              {/*    <select*/}
-              {/*        className="form-select w-auto"*/}
-              {/*        value={filterSubmission}*/}
-              {/*        onChange={(e) => setFilterSubmission(e.target.value)}*/}
-              {/*    >*/}
-              {/*        <option>All Game Jams</option>*/}
-              {/*        <option>2023 Revival Jam</option>*/}
-              {/*        <option>2023 Harvest Game Jam</option>*/}
-              {/*        <option>2023 Halloween Game Jam</option>*/}
-              {/*        <option>2023 December Dash Game Jam</option>*/}
-              {/*        <option>2024 January Game Jamboree</option>*/}
-              {/*        <option>2024 February Frenzy Game Jam</option>*/}
-              {/*        <option>2024 Harvest Game Jam</option>*/}
-              {/*        <option>2024 Halloween Game Jam</option>*/}
-              {/*        <option>2025 Winter Game Jam</option>*/}
-              {/*        <option>2025 February Frenzy Game Jam</option>*/}
-              {/*        <option>2025 March Madness Game Jam</option>*/}
-              {/*        <option>2025 Harvest Game Jam</option>*/}
-              {/*        <option>2025 Halloween Game Jam</option>*/}
-              {/*    </select>*/}
-
-              {/*  <select*/}
-              {/*    className="form-select w-auto"*/}
-              {/*    value={filterAwards}*/}
-              {/*    onChange={(e) => setFilterAwards(e.target.value)}*/}
-              {/*  >*/}
-              {/*      <option>All Games</option>*/}
-              {/*      <option>Best Overall</option>*/}
-              {/*      <option>Worst Overall</option>*/}
-              {/*      <option>Best Visuals</option>*/}
-              {/*      <option>Best Art Direction</option>*/}
-              {/*      <option>Best Mechanics</option>*/}
-              {/*      <option>Most Unique Gameplay Loop</option>*/}
-              {/*      <option>Most Unique Mechanics</option>*/}
-              {/*      <option>Most Out of The Box</option>*/}
-              {/*  </select>*/}
-              {/*</div>*/}
-
               <div className="col-md-9 col-lg-9 mb-4">
                   <div className="row">
                       {filteredJams.map((jam) => (
