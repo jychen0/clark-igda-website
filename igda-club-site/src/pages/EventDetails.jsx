@@ -12,7 +12,8 @@ function EventDetails() {
   useEffect(() => {
     async function fetchEvent() {
       try {
-        const res = await fetch(`http://localhost:3001/events/${id}`);
+          //const res = await fetch(`/events/${id}`);
+        const res = await fetch(`/get-event-by-id?id=${id}`);
         if (!res.ok) throw new Error("Event not found");
         const data = await res.json();
         setEvent(data);
@@ -41,9 +42,9 @@ function EventDetails() {
       <div className="event-details-container">
         {event.posterIMG && (
           <img
-            src={event.posterIMG}
-            alt={event.eventName}
-            className="event-poster"
+              src={`${process.env.PUBLIC_URL}/assets/event_posters/${event.posterIMG}`}
+              alt={event.eventName}
+              className="event-poster"
           />
         )}
 
