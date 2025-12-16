@@ -1,25 +1,49 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import "../css/About.css";
 import GenericHeader from "../components/GenericHeader";
 
 function About() {
-  const eboard = [
-      { name: "Maya Patten", role: "President", email: "mpatten@clarku.edu" },
-      { name: "Chase Burdin", role: "Vice President", email: "cburdin@clarku.edu" },
-      { name: "Maxwell DeRienze", role: "Treasurer", email: "mderienze@clarku.edu" },
-      { name: "Charlie Schmerzler", role: "Secretary", email: "cschmerzler@clarku.edu" },
-      { name: "Ren Grunberg", role: "Event Planner", email: "rgrunberg@clarku.edu" },
-      { name: "Diego Delmont", role: "Event Planner", email: "ddelmont@clarku.edu" },
-      { name: "Jeremy Baranda", role: "Event Planner", email: "jbaranda@clarku.edu" },
-      { name: "Zamayne Abney", role: "Event Planner", email: "zabney@clarku.edu" },
-      { name: "Yaksh Goyani", role: "Event Planner", email: "ygoyani@clarku.edu" },
-      { name: "Zareh Malkhassian", role: "Event Planner", email: "zmalkhassian@clarku.edu" },
-      { name: "Darrow Mohammadi-Hall", role: "Event Planner", email: "dmohammadihall@clarku.edu" },
-      { name: "Jasper Vergo", role: "Event Planner", email: "jvergo@clarku.edu" },
-      { name: "Max Miller", role: "Event Staff", email: "mmiller2@clarku.edu" },
-      { name: "Robert Matzkin", role: "Event Staff", email: "rmatzkin@clarku.edu" },
-  ];
+    const [eboard, setEboard] = useState([]);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchEboard = async () => {
+            //asynchronous function
+            try {
+                const res = await fetch("/get-all-eboard")
+                if (!res.ok) {
+                    throw new Error("Failed fetching events, error:" + res.statusText);
+                }
+                const data = await res.json();
+                if (data.message === "success") {
+                    setEboard(data.data);
+                } else {
+                    setError(data.message);
+                }
+            } catch (err) {
+                setError(err.message);
+            }
+        }
+        fetchEboard();
+    }, [])
+
+  //   const eboard = [
+  //     { name: "Maya Patten", role: "President", email: "mpatten@clarku.edu" },
+  //     { name: "Chase Burdin", role: "Vice President", email: "cburdin@clarku.edu" },
+  //     { name: "Maxwell DeRienze", role: "Treasurer", email: "mderienze@clarku.edu" },
+  //     { name: "Charlie Schmerzler", role: "Secretary", email: "cschmerzler@clarku.edu" },
+  //     { name: "Ren Grunberg", role: "Event Planner", email: "rgrunberg@clarku.edu" },
+  //     { name: "Diego Delmont", role: "Event Planner", email: "ddelmont@clarku.edu" },
+  //     { name: "Jeremy Baranda", role: "Event Planner", email: "jbaranda@clarku.edu" },
+  //     { name: "Zamayne Abney", role: "Event Planner", email: "zabney@clarku.edu" },
+  //     { name: "Yaksh Goyani", role: "Event Planner", email: "ygoyani@clarku.edu" },
+  //     { name: "Zareh Malkhassian", role: "Event Planner", email: "zmalkhassian@clarku.edu" },
+  //     { name: "Darrow Mohammadi-Hall", role: "Event Planner", email: "dmohammadihall@clarku.edu" },
+  //     { name: "Jasper Vergo", role: "Event Planner", email: "jvergo@clarku.edu" },
+  //     { name: "Max Miller", role: "Event Staff", email: "mmiller2@clarku.edu" },
+  //     { name: "Robert Matzkin", role: "Event Staff", email: "rmatzkin@clarku.edu" },
+  // ];
 
     function getRandomInteger() {
         return Math.floor(Math.random() * (1));
@@ -115,13 +139,13 @@ function About() {
               <div className="card border-0 shadow-sm eboard-card">
                 <div className="card-body text-center">
                   <h6 className="card-title fw-bold">{member.name}</h6>
-                  <p className="text-danger mb-1">{member.role}</p>
-                  <a
-                    href={`mailto:${member.email}`}
-                    className="text-muted small email-link"
-                  >
-                    {member.email}
-                  </a>
+                  <p className="text-danger mb-1">{member.position}</p>
+                  {/*<a*/}
+                  {/*  href={`mailto:${member.email}`}*/}
+                  {/*  className="text-muted small email-link"*/}
+                  {/*>*/}
+                  {/*  {member.email}*/}
+                  {/*</a>*/}
                 </div>
               </div>
             </div>

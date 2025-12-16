@@ -403,7 +403,6 @@ app.get("/events/:id", async (req, res) => {
   }
 });
 
-
 app.get("/get-events-by-filters", function (req, res) {
     let searchKey = req.query.search_key;
     let min_year = req.query.min_year;
