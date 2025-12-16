@@ -96,7 +96,7 @@ function EventDetails() {
                   {s.speakerPos && <p>{s.speakerPos}</p>}
                   {s.speakerCred && <p>{s.speakerCred}</p>}
                   {s.speakerInfo && (
-                    <a href={s.speakerInfo} target="_blank" rel="noreferrer">
+                    <a href={`https://www.linkedin.com/in/${s.speakerInfo}`}target="_blank" rel="noreferrer">
                       Social / Website
                     </a>
                   )}
